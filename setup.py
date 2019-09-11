@@ -1,6 +1,14 @@
 from setuptools import find_packages, setup
 
 
+def parse_requirements(f):
+    lines = []
+    with open(f, 'r') as fp:
+        for line in fp.readlines():
+            lines.append(line.strip())
+    return lines
+
+
 def main():
     setup(
         name='mlconfig',
@@ -8,6 +16,7 @@ def main():
         author='Narumi',
         author_email='weaper@gamil.com',
         packages=find_packages(),
+        install_requires=parse_requirements('requirements.txt'),
     )
 
 
