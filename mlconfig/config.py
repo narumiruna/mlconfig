@@ -51,11 +51,10 @@ def load(f):
     return config
 
 
-def register(func_or_cls):
-    _REGISTERED[func_or_cls.__name__] = func_or_cls
+def register(func_or_cls, name=None):
+    if name is None:
+        name = func_or_cls.__name__
+
+    _REGISTERED[name] = func_or_cls
+
     return func_or_cls
-
-
-def create(*args, **kwargs):
-    name = kwargs.pop('name')
-    return _REGISTERED[name](*args, **kwargs)
