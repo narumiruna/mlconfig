@@ -1,7 +1,9 @@
+import functools
+
 from .collections import AttrDict
 from .utils import load_yaml, save_yaml
 
-_REGISTERED = {}
+_REGISTRY = {}
 
 
 class Config(AttrDict):
@@ -11,7 +13,7 @@ class Config(AttrDict):
 
     def __call__(self, *args, **kwargs):
         kwargs.update({k: v for k, v in self.items() if k != 'name'})
-        return _REGISTERED[self.name](*args, **kwargs)
+        return _REGISTRY[self.name](*args, **kwargs)
 
 
 def _flatten(data, prefix=None, sep='.'):
@@ -51,10 +53,15 @@ def load(f):
     return config
 
 
-def register(func_or_cls, name=None):
-    if name is None:
-        name = func_or_cls.__name__
+def register(func_or_cls=None, name=None):
 
-    _REGISTERED[name] = func_or_cls
+    def _register(func_or_cls, name=None):
+        if name is None:
+            name = func_or_cls.__name__
+        _REGISTRY[name] = func_or_cls
+        return func_or_cls
 
-    return func_or_cls
+    if func_or_cls is None:
+        return functools.partial(_register, name=name)
+
+    return _register(func_or_cls, name=name)
