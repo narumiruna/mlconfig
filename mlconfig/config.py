@@ -9,7 +9,7 @@ class Config(AttrDict):
     def save(self, f):
         save_yaml(self.to_dict(), f)
 
-    def create(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
         kwargs.update({k: v for k, v in self.items() if k != 'name'})
         return _REGISTERED[self.name](*args, **kwargs)
 

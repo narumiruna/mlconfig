@@ -25,12 +25,12 @@ def main():
     config = mlconfig.load(f)
     print(config)
 
-    a = config.a.create()
+    a = config.a()
     print('a = {}'.format(a))
-    b = config.b.create()
+    b = config.b()
     print('b = {}'.format(b))
 
-    c = config.op.create(a, b)
+    c = config.op(a, b)
     print('c = {}'.format(c))
 
 
