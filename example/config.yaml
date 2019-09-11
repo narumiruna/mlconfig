@@ -1,0 +1,15 @@
+x1: 1
+x2: 2
+
+a:
+  name: Point
+  x: $x1
+  y: 3
+
+b:
+  name: Point
+  x: $x1
+  y: 4
+
+op:
+  name: add
