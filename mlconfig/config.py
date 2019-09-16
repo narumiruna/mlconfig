@@ -1,20 +1,30 @@
 import functools
 
 from .collections import AttrDict
-from .utils import load_yaml, save_yaml
+from .utils import load_json, load_yaml, save_json, save_yaml
 
 _REGISTRY = {}
 
 
 class Config(AttrDict):
 
-    def save(self, f):
-        save_yaml(self.to_dict(), f)
+    def save(self, f, **kwargs):
+        r"""Save configuration file
+
+        Arguments:
+            f (str): the configuration file
+        """
+        if f.endswith('.yaml'):
+            save_yaml(self.to_dict(), f, **kwargs)
+        elif f.endswith('.json'):
+            save_json(self.to_dict(), f, **kwargs)
+        else:
+            raise ValueError('file extension should be .yaml or .json')
 
     def __call__(self, *args, **kwargs):
         new_kwargs = {k: v for k, v in self.items() if k != 'name'}
         new_kwargs.update(kwargs)
-        
+
         # create object recursively
         for k, v in new_kwargs.items():
             if callable(v):
@@ -54,8 +64,24 @@ def _replace(data, prefix='$'):
     return data
 
 
-def load(f):
-    config = Config(_replace(load_yaml(f)))
+def load(f, replace_values=True):
+    r"""Load the configuration file
+
+    Arguments:
+        f (str): the configuration file
+        replace_values (bool, optional): replace the values with prefix $
+    """
+    if f.endswith('.yaml'):
+        data = load_yaml(f)
+    elif f.endswith('.json'):
+        data = load_json(f)
+    else:
+        raise ValueError('file extension should be .yaml or .json')
+
+    if replace_values:
+        data = _replace(data)
+
+    config = Config(data)
     config.set_immutable()
     return config
 
