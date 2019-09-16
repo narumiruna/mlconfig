@@ -13,6 +13,11 @@ class Config(AttrDict):
 
     def __call__(self, *args, **kwargs):
         kwargs.update({k: v for k, v in self.items() if k != 'name'})
+
+        for k, v in kwargs.items():
+            if callable(v):
+                kwargs[k] = v()
+
         return _REGISTRY[self.name](*args, **kwargs)
 
 
