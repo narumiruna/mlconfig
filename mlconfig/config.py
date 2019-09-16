@@ -42,19 +42,19 @@ def _flatten(data, prefix=None, sep='.'):
 
         if isinstance(value, dict):
             d.update(_flatten(value, prefix=key))
-        else:
-            d[key] = value
+
+        d[key] = value
 
     return d
 
 
 def _replace(data, prefix='$'):
-    value_map = _flatten(data)
+    m = _flatten(data)
 
     def replace(d):
         for key, value in d.items():
             if isinstance(value, str) and value.startswith(prefix):
-                d[key] = value_map[value.lstrip(prefix)]
+                d[key] = m[value.lstrip(prefix)]
 
             if isinstance(value, dict):
                 replace(value)
