@@ -12,8 +12,9 @@ class Config(AttrDict):
         save_yaml(self.to_dict(), f)
 
     def __call__(self, *args, **kwargs):
-        kwargs.update({k: v for k, v in self.items() if k != 'name'})
-        return _REGISTRY[self.name](*args, **kwargs)
+        new_kwargs = {k: v for k, v in self.items() if k != 'name'}
+        new_kwargs.update(kwargs)
+        return _REGISTRY[self.name](*args, **new_kwargs)
 
 
 def _flatten(data, prefix=None, sep='.'):
