@@ -14,6 +14,12 @@ class Config(AttrDict):
     def __call__(self, *args, **kwargs):
         new_kwargs = {k: v for k, v in self.items() if k != 'name'}
         new_kwargs.update(kwargs)
+        
+        # create object recursively
+        for k, v in new_kwargs.items():
+            if callable(v):
+                new_kwargs[k] = v()
+
         return _REGISTRY[self.name](*args, **new_kwargs)
 
 
