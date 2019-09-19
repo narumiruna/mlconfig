@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 def main():
     setup(
         name='mlconfig',
-        version='0.1.6',
+        version='0.1.7',
         author='Narumi',
         author_email='weaper@gamil.com',
         packages=find_packages(),
