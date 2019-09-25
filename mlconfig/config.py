@@ -27,7 +27,7 @@ class Config(AttrDict):
 
         # create object recursively
         for k, v in new_kwargs.items():
-            if callable(v):
+            if isinstance(v, self.__class__):
                 new_kwargs[k] = v()
 
         return _REGISTRY[self.name](*args, **new_kwargs)
