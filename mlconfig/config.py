@@ -23,12 +23,13 @@ class Config(AttrDict):
 
     def __call__(self, *args, **kwargs):
         new_kwargs = {k: v for k, v in self.items() if k != 'name'}
-        new_kwargs.update(kwargs)
 
         # create object recursively
         for k, v in new_kwargs.items():
             if isinstance(v, self.__class__):
                 new_kwargs[k] = v()
+
+        new_kwargs.update(kwargs)
 
         return _REGISTRY[self.name](*args, **new_kwargs)
 
