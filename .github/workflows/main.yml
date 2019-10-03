@@ -1,4 +1,4 @@
-name: Unit test
+name: Python package
 
 on: [push]
 
