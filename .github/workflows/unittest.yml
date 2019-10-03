@@ -1,4 +1,4 @@
-name: Python package
+name: Unit test
 
 on: [push]
 
@@ -21,9 +21,3 @@ jobs:
         run: python setup.py install
       - name: Test
         run: python -m unittest discover test --verbose
-      - name: Publish package
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: ${{ secrets.pypi_username }}
-          password: ${{ secrets.pypi_password }}
