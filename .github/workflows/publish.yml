@@ -1,5 +1,0 @@
-- name: Publish package
-  uses: pypa/gh-action-pypi-publish@master
-  with:
-    user: narumin
-    password: ${{ secrets.pypi_password }}
