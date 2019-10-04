@@ -18,7 +18,7 @@ def main():
         author='Narumi',
         author_email='weaper@gamil.com',
         packages=find_packages(),
-        install_requires=['pyyaml', 'git'],
+        install_requires=['pyyaml'],
     )
 
 
