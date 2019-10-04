@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 from setuptools import find_packages, setup
 
@@ -8,7 +8,9 @@ def get_committed_date(tag):
 
 
 def get_version():
-    return os.system('git describe --tags')
+    tag = subprocess.check_output(['git', 'describe', '--tags']).decode('utf-8')
+    version = tag.lstrip('v').rstrip('-')
+    return version
 
 
 def main():
