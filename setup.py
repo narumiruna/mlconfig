@@ -9,7 +9,7 @@ def get_committed_date(tag):
 
 def get_version():
     tag = subprocess.check_output(['git', 'describe', '--tags']).decode('utf-8')
-    version = tag.lstrip('v').rstrip('-')
+    version = tag.lstrip('v').split('-')[0]
     return version
 
 
