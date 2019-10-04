@@ -1,4 +1,5 @@
-import git
+import os
+
 from setuptools import find_packages, setup
 
 
@@ -7,10 +8,7 @@ def get_committed_date(tag):
 
 
 def get_version():
-    tags = git.Repo().tags
-    tags = sorted(tags, key=get_committed_date, reverse=True)
-    version = str(tags[0]).lstrip('v')
-    return version
+    return os.system('git describe --tags')
 
 
 def main():
@@ -20,7 +18,7 @@ def main():
         author='Narumi',
         author_email='weaper@gamil.com',
         packages=find_packages(),
-        install_requires=['pyyaml'],
+        install_requires=['pyyaml', 'git'],
     )
 
 
