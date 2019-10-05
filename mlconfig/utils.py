@@ -1,6 +1,16 @@
 import json
 
 import yaml
+from collections import Iterable
+
+import os
+
+
+def isextension(f, ext):
+    if not isinstance(ext, Iterable):
+        ext = (ext,)
+
+    return os.path.splitext(f)[-1] in ext
 
 
 def load_json(f):

@@ -1,9 +1,7 @@
 import functools
-import os
-from collections import Iterable
 
 from .collections import AttrDict
-from .utils import load_json, load_yaml, save_json, save_yaml
+from .utils import isextension, load_json, load_yaml, save_json, save_yaml
 
 _REGISTRY = {}
 
@@ -67,13 +65,6 @@ def _replace(data, prefix='$'):
     return data
 
 
-def _isextension(f, ext):
-    if not isinstance(ext, Iterable):
-        ext = (ext,)
-
-    return os.path.splitext(f)[-1] in ext
-
-
 def load(f, replace_values=True):
     r"""Load the configuration file
 
@@ -81,9 +72,9 @@ def load(f, replace_values=True):
         f (str): the configuration file
         replace_values (bool, optional): replace the values with prefix $
     """
-    if _isextension(f, ('.yaml', '.yml')):
+    if isextension(f, ('.yaml', '.yml')):
         data = load_yaml(f)
-    elif _isextension(f, '.json'):
+    elif isextension(f, '.json'):
         data = load_json(f)
     else:
         raise ValueError('file extension should be .yaml, .yml or .json')
