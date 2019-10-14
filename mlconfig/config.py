@@ -87,13 +87,15 @@ def load(f, replace_values=True):
     return config
 
 
-def register(func_or_cls=None, name=None):
+def register(func_or_cls=None, name: str = None):
     """Register function or class
 
     Arguments:
         func_or_cls: function or class to be registered
         name (str, optional): name of the func_or_cls in registry
     """
+    if isinstance(func_or_cls, str) and name is None:
+        func_or_cls, name = None, func_or_cls
 
     def _register(func_or_cls, name=None):
         if name is None:
