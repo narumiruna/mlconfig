@@ -88,11 +88,22 @@ def load(f, replace_values=True):
 
 
 def register(func_or_cls=None, name=None):
+    """Register function or class
+
+    Arguments:
+        func_or_cls: function or class to be registered
+        name (str, optional): name of the func_or_cls in registry
+    """
 
     def _register(func_or_cls, name=None):
         if name is None:
             name = func_or_cls.__name__
-        _REGISTRY[name] = func_or_cls
+
+        if name not in _REGISTRY:
+            _REGISTRY[name] = func_or_cls
+        else:
+            raise ValueError('duplicate name {} found'.format(name))
+
         return func_or_cls
 
     if func_or_cls is None:
