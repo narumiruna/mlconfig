@@ -114,5 +114,7 @@ def register(func_or_cls=None, name: str = None):
 
     return _register(func_or_cls, name=name)
 
+
 def set_key_of_func_or_cls(key: str):
+    global _KEY_OF_FUNC_OR_CLS
     _KEY_OF_FUNC_OR_CLS = key
