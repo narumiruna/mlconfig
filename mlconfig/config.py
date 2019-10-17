@@ -4,6 +4,7 @@ from .collections import AttrDict
 from .utils import isextension, load_json, load_yaml, save_json, save_yaml
 
 _REGISTRY = {}
+_KEY_OF_FUNC_OR_CLS = 'name'
 
 
 class Config(AttrDict):
@@ -22,7 +23,7 @@ class Config(AttrDict):
             raise ValueError('file extension should be .yaml or .json')
 
     def __call__(self, *args, **kwargs):
-        new_kwargs = {k: v for k, v in self.items() if k != 'name'}
+        new_kwargs = {k: v for k, v in self.items() if k != _KEY_OF_FUNC_OR_CLS}
 
         # create object recursively
         for k, v in new_kwargs.items():
