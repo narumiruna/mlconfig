@@ -4,6 +4,7 @@ from .collections import AttrDict
 from .utils import isextension, load_json, load_yaml, save_json, save_yaml
 
 _REGISTRY = {}
+_KEY_OF_FUNC_OR_CLS = 'name'
 
 
 class Config(AttrDict):
@@ -22,7 +23,11 @@ class Config(AttrDict):
             raise ValueError('file extension should be .yaml or .json')
 
     def __call__(self, *args, **kwargs):
-        new_kwargs = {k: v for k, v in self.items() if k != 'name'}
+        new_kwargs = {}
+
+        for k, v in self.items():
+            if k != _KEY_OF_FUNC_OR_CLS:
+                new_kwargs[k] = v
 
         # create object recursively
         for k, v in new_kwargs.items():
@@ -31,7 +36,7 @@ class Config(AttrDict):
 
         new_kwargs.update(kwargs)
 
-        return _REGISTRY[self.name](*args, **new_kwargs)
+        return _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
 
 
 def _flatten(data, prefix=None, sep='.'):
@@ -112,3 +117,8 @@ def register(func_or_cls=None, name: str = None):
         return functools.partial(_register, name=name)
 
     return _register(func_or_cls, name=name)
+
+
+def set_key_of_func_or_cls(key: str):
+    global _KEY_OF_FUNC_OR_CLS
+    _KEY_OF_FUNC_OR_CLS = key
