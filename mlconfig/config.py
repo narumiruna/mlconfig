@@ -23,7 +23,11 @@ class Config(AttrDict):
             raise ValueError('file extension should be .yaml or .json')
 
     def __call__(self, *args, **kwargs):
-        new_kwargs = {k: v for k, v in self.items() if k != _KEY_OF_FUNC_OR_CLS}
+        new_kwargs = {}
+
+        for k, v in self.items():
+            if k != _KEY_OF_FUNC_OR_CLS:
+                new_kwargs[k] = v
 
         # create object recursively
         for k, v in new_kwargs.items():
@@ -32,7 +36,7 @@ class Config(AttrDict):
 
         new_kwargs.update(kwargs)
 
-        return _REGISTRY[self.name](*args, **new_kwargs)
+        return _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
 
 
 def _flatten(data, prefix=None, sep='.'):
