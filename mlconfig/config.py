@@ -113,3 +113,6 @@ def register(func_or_cls=None, name: str = None):
         return functools.partial(_register, name=name)
 
     return _register(func_or_cls, name=name)
+
+def set_key_of_func_or_cls(key: str):
+    _KEY_OF_FUNC_OR_CLS = key
