@@ -20,4 +20,4 @@ jobs:
       - name: Install package
         run: python setup.py install
       - name: Test
-        run: python -m unittest discover test --verbose
+        run: python -m unittest discover tests --verbose
