@@ -43,6 +43,21 @@ class Config(AttrDict):
 
         return _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
 
+    def merge_config(self, other, allow_new_key):
+        for key, value in other.items():
+            if key not in self:
+                if not allow_new_key:
+                    raise ValueError('{} not found and new key is not allowed'.format(key))
+
+            if isinstance(value, self.__class__):
+                self[key].merge_config(value, allow_new_key)
+            else:
+                self[key] = value
+
+    def merge_from_config_file(self, f: str, replace_values=True, allow_new_key=False):
+        other = load(f, replace_values=replace_values)
+        self.merge_config(other, allow_new_key)
+
 
 def _flatten(data, prefix=None, sep='.'):
     d = {}
