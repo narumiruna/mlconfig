@@ -8,3 +8,11 @@ class TestAttrDict(unittest.TestCase):
         d = AttrDict(a=1, b=2)
         self.assertEqual(d.a, 1)
         self.assertEqual(d.b, 2)
+
+    def test_flat(self):
+        data = {'a': 0, 'b': {'c': 1, 'd': {'e': 2, 'f': 3}}}
+
+        d1 = AttrDict(data).flat()
+        d2 = {'a': 0, 'b.c': 1, 'b.d.e': 2, 'b.d.f': 3}
+
+        self.assertDictEqual(d1, d2)
