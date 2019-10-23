@@ -11,7 +11,7 @@ class TestUtils(unittest.TestCase):
         self.data = {
             'trainer': {
                 'name': 'ImageClassificationTrainer',
-                'num_epochs': 20,
+                'num_epochs': 20
             },
             'dataset': {
                 'name': 'MNISTDataloader',
@@ -30,7 +30,7 @@ class TestUtils(unittest.TestCase):
                 'name': 'StepLR',
                 'step_size': 10,
                 'gamma': 0.1
-            },
+            }
         }
 
         self.temp_dir = tempfile.gettempdir()
@@ -54,11 +54,15 @@ class TestUtils(unittest.TestCase):
     def test_load_dict_value_error(self):
         with self.assertRaises(ValueError):
             load_dict(os.path.join(self.temp_dir, 'test'))
+
+        with self.assertRaises(ValueError):
             load_dict(os.path.join(self.temp_dir, 'test.py'))
 
     def test_save_dict_value_error(self):
         with self.assertRaises(ValueError):
             save_dict(self.data, os.path.join(self.temp_dir, 'test'))
+
+        with self.assertRaises(ValueError):
             save_dict(self.data, os.path.join(self.temp_dir, 'test.py'))
 
     def test_isextension(self):
@@ -81,11 +85,3 @@ class TestUtils(unittest.TestCase):
         self.assertFalse(isextension('.', '.jpg'))
         self.assertFalse(isextension('.', ('.jpg',)))
         self.assertFalse(isextension('.', ('.jpg', '.png')))
-
-
-def main():
-    unittest.main()
-
-
-if __name__ == '__main__':
-    main()
