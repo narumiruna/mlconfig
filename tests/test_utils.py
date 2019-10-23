@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 
-from mlconfig.utils import load_dict, save_dict
+from mlconfig.utils import load_dict, save_dict, isextension
 
 
 class TestUtils(unittest.TestCase):
@@ -60,6 +60,19 @@ class TestUtils(unittest.TestCase):
         with self.assertRaises(ValueError):
             save_dict(self.data, os.path.join(self.temp_dir, 'test'))
             save_dict(self.data, os.path.join(self.temp_dir, 'test.py'))
+
+    def test_isextension(self):
+        self.assertTrue(isextension('test.jpg', '.jpg'))
+        self.assertTrue(isextension('test.jpg', ('.jpg',)))
+        self.assertTrue(isextension('test.jpg', ('.jpg', '.png')))
+
+        self.assertFalse(isextension('test', '.jpg'))
+        self.assertFalse(isextension('test', ('.jpg',)))
+        self.assertFalse(isextension('test', ('.jpg', '.png')))
+
+        self.assertFalse(isextension('', '.jpg'))
+        self.assertFalse(isextension('', ('.jpg',)))
+        self.assertFalse(isextension('', ('.jpg', '.png')))
 
 
 def main():
