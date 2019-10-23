@@ -37,12 +37,11 @@ class TestUtils(unittest.TestCase):
         self.yml_path = os.path.join(tempfile.gettempdir(), 'test.yml')
         self.json_path = os.path.join(tempfile.gettempdir(), 'test.json')
 
-    def test_save_dict(self):
+    def test_save_and_load_dict(self):
         save_dict(self.data, self.yaml_path)
         save_dict(self.data, self.yml_path)
         save_dict(self.data, self.json_path)
 
-    def test_load_dict(self):
         yaml_data = load_dict(self.yaml_path)
         yml_data = load_dict(self.yml_path)
         json_data = load_dict(self.json_path)
