@@ -33,9 +33,10 @@ class TestUtils(unittest.TestCase):
             },
         }
 
-        self.yaml_path = os.path.join(tempfile.gettempdir(), 'test.yaml')
-        self.yml_path = os.path.join(tempfile.gettempdir(), 'test.yml')
-        self.json_path = os.path.join(tempfile.gettempdir(), 'test.json')
+        self.temp_dir = tempfile.gettempdir()
+        self.yaml_path = os.path.join(self.temp_dir, 'test.yaml')
+        self.yml_path = os.path.join(self.temp_dir, 'test.yml')
+        self.json_path = os.path.join(self.temp_dir, 'test.json')
 
     def test_save_and_load_dict(self):
         save_dict(self.data, self.yaml_path)
@@ -49,6 +50,16 @@ class TestUtils(unittest.TestCase):
         self.assertDictEqual(self.data, yaml_data)
         self.assertDictEqual(yaml_data, yml_data)
         self.assertDictEqual(yml_data, json_data)
+
+    def test_load_dict_value_error(self):
+        with self.assertRaises(ValueError):
+            load_dict(os.path.join(self.temp_dir, 'test'))
+            load_dict(os.path.join(self.temp_dir, 'test.py'))
+
+    def test_save_dict_value_error(self):
+        with self.assertRaises(ValueError):
+            save_dict(self.data, os.path.join(self.temp_dir, 'test'))
+            save_dict(self.data, os.path.join(self.temp_dir, 'test.py'))
 
 
 def main():
