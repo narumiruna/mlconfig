@@ -38,15 +38,15 @@ def load_dict(f: str) -> dict:
     elif isextension(f, '.json'):
         data = load_json(f)
     else:
-        raise ValueError('file extension should be .yaml, .yml or .json')
+        raise ValueError('file extension of {} should be .yaml, .yml or .json'.format(f))
 
     return data
 
 
 def save_dict(data: dict, f: str, **kwargs):
-    if f.endswith('.yaml'):
+    if isextension(f, ('.yaml', '.yml')):
         save_yaml(data, f, **kwargs)
-    elif f.endswith('.json'):
+    elif isextension(f, '.json'):
         save_json(data, f, **kwargs)
     else:
-        raise ValueError('file extension should be .yaml or .json')
+        raise ValueError('file extension of {} should be .yaml or .json'.format(f))
