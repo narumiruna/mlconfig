@@ -22,7 +22,7 @@ class AttrDict(dict):
             raise AttributeError('Attempted to set "{}" to "{}", but AttrDict is immutable'.format(key, value))
 
         if isinstance(value, dict):
-            value = AttrDict(value)
+            value = self.__class__(value)
 
         if key in self.__dict__:
             self.__dict__[key] = value
