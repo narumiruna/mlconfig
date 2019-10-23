@@ -1,7 +1,7 @@
 import functools
 
 from .collections import AttrDict
-from .utils import isextension, load_json, load_yaml, save_json, save_yaml
+from .utils import load_dict, save_dict
 
 _REGISTRY = {}
 _KEY_OF_FUNC_OR_CLS = 'name'
@@ -15,12 +15,7 @@ class Config(AttrDict):
         Arguments:
             f (str): the configuration file
         """
-        if f.endswith('.yaml'):
-            save_yaml(self.to_dict(), f, **kwargs)
-        elif f.endswith('.json'):
-            save_json(self.to_dict(), f, **kwargs)
-        else:
-            raise ValueError('file extension should be .yaml or .json')
+        save_dict(self.to_dict(), f, **kwargs)
 
     def __call__(self, *args, **kwargs):
         new_kwargs = {}
@@ -77,12 +72,7 @@ def load(f, replace_values=True):
         f (str): the configuration file
         replace_values (bool, optional): replace the values with prefix $
     """
-    if isextension(f, ('.yaml', '.yml')):
-        data = load_yaml(f)
-    elif isextension(f, '.json'):
-        data = load_json(f)
-    else:
-        raise ValueError('file extension should be .yaml, .yml or .json')
+    data = load_dict(f)
 
     if replace_values:
         data = _replace(data)
