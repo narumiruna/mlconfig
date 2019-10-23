@@ -1,12 +1,12 @@
 import json
 import os
-from collections.abc import Iterable
+from collections.abc import Sequence
 
 import yaml
 
 
 def isextension(f: str, ext) -> bool:
-    if not isinstance(ext, Iterable):
+    if not isinstance(ext, Sequence):
         ext = (ext,)
 
     return os.path.splitext(f)[1] in ext
