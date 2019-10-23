@@ -16,3 +16,10 @@ class TestAttrDict(unittest.TestCase):
         d2 = {'a': 0, 'b.c': 1, 'b.d.e': 2, 'b.d.f': 3}
 
         self.assertDictEqual(d1, d2)
+
+    def test_to_dict(self):
+        d = AttrDict()
+        d.a = 0
+        d.b = 1
+
+        self.assertEqual(d.to_dict(), d)
