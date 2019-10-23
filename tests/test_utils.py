@@ -1,11 +1,14 @@
+import os
+import tempfile
 import unittest
-from mlconfig.utils import load_dict
+
+from mlconfig.utils import load_dict, save_dict
 
 
 class TestUtils(unittest.TestCase):
 
-    def test_load_dict(self):
-        data = {
+    def setUp(self):
+        self.data = {
             'trainer': {
                 'name': 'ImageClassificationTrainer',
                 'num_epochs': 20,
@@ -30,14 +33,19 @@ class TestUtils(unittest.TestCase):
             },
         }
 
-        yaml_path = 'tests/test.yaml'
-        json_path = 'tests/test.json'
+        self.yaml_path = os.path.join(tempfile.gettempdir(), 'test.yaml')
+        self.json_path = os.path.join(tempfile.gettempdir(), 'test.json')
 
-        yaml_data = load_dict(yaml_path)
-        json_data = load_dict(json_path)
+    def test_save_dict(self):
+        save_dict(self.data, self.yaml_path)
+        save_dict(self.data, self.json_path)
 
-        self.assertDictEqual(data, yaml_data)
-        self.assertDictEqual(data, json_data)
+    def test_load_dict(self):
+        yaml_data = load_dict(self.yaml_path)
+        json_data = load_dict(self.json_path)
+
+        self.assertDictEqual(self.data, yaml_data)
+        self.assertDictEqual(self.data, json_data)
         self.assertDictEqual(yaml_data, json_data)
 
 
