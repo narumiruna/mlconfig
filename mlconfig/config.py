@@ -18,7 +18,7 @@ class Config(AttrDict):
         save_dict(self.to_dict(), f, **kwargs)
 
     def __call__(self, *args, **kwargs):
-        return create(self, *args, **kwargs)
+        return create_object(self, *args, **kwargs)
 
 
 def _flatten(data, prefix=None, sep='.'):
@@ -52,14 +52,14 @@ def _replace(data, prefix='$'):
     return data
 
 
-def create(config: Config, *args, recursive=False, **kwargs):
-    """Create object from config.
+def create_object(config: Config, *args, recursive=False, **kwargs):
+    r"""Create object (or get function output) from config
 
     Arguments:
         config (Config): config to create object
         recursive (bool, optional): create object recursively
 
-    Returns an object or function output with respect to the config
+    Returns an object (or function output)
     """
     new_kwargs = {}
 
@@ -68,10 +68,9 @@ def create(config: Config, *args, recursive=False, **kwargs):
             new_kwargs[k] = v
 
     if recursive:
-        # create object recursively
         for k, v in new_kwargs.items():
             if isinstance(v, Config):
-                new_kwargs[k] = create(v, recursive=recursive)
+                new_kwargs[k] = create_object(v, recursive=recursive)
 
     new_kwargs.update(kwargs)
 
@@ -96,7 +95,7 @@ def load(f, replace_values=True):
 
 
 def register(func_or_cls=None, name: str = None):
-    """Register function or class
+    r"""Register function or class
 
     Arguments:
         func_or_cls: function or class to be registered
