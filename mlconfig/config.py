@@ -3,6 +3,8 @@ import functools
 from .collections import AttrDict
 from .utils import load_dict, save_dict
 
+import inspect
+
 _REGISTRY = {}
 _KEY_OF_FUNC_OR_CLS = 'name'
 
@@ -88,6 +90,31 @@ def _replace(data, prefix='$'):
     replace(data)
 
     return data
+
+
+def create_object(config: Config, *args, recursive=False, **kwargs):
+    r"""Create object (or get function output) from config
+
+    Arguments:
+        config (Config): config to create object
+        recursive (bool, optional): create object recursively
+
+    Returns an object (or function output)
+    """
+    for k, v in config.items():
+        if k not in kwargs and k != _KEY_OF_FUNC_OR_CLS:
+            kwargs[k] = v
+
+    if recursive:
+        for k, v in kwargs.items():
+            if isinstance(v, Config):
+                kwargs[k] = create_object(v, recursive=recursive)
+
+    func_or_cls = _REGISTRY[config[_KEY_OF_FUNC_OR_CLS]]
+    spec = inspect.signature(func_or_cls)
+    kwargs = {k: v for k, v in kwargs.items() if k in spec.parameters}
+
+    return func_or_cls(*args, **kwargs)
 
 
 def load(f, replace_values=True):
