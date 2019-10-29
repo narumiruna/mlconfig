@@ -1,3 +1,4 @@
+import copy
 import functools
 import inspect
 
@@ -30,6 +31,7 @@ class Config(AttrDict):
 
         Returns an object (or function output)
         """
+        kwargs = copy.deepcopy(kwargs)
 
         for k, v in self.items():
             if k not in kwargs and k != _KEY_OF_FUNC_OR_CLS:
