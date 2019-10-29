@@ -1,4 +1,6 @@
+import copy
 import functools
+import inspect
 
 from .collections import AttrDict
 from .utils import load_dict, save_dict
@@ -9,6 +11,9 @@ _KEY_OF_FUNC_OR_CLS = 'name'
 
 class Config(AttrDict):
 
+    def __call__(self, *args, **kwargs):
+        return self.create_object(self, *args, **kwargs)
+
     def save(self, f, **kwargs):
         r"""Save configuration file
 
@@ -17,31 +22,48 @@ class Config(AttrDict):
         """
         save_dict(self.to_dict(), f, **kwargs)
 
-    def __call__(self, *args, **kwargs):
-        return self.create_object(self, *args, **kwargs)
-
-    def create_object(self, *args, recursive=False, **kwargs):
+    def create_object(self, *args, recursive=False, ignore_args=False, **kwargs):
         r"""Create object (or get function output) from config
 
         Arguments:
             recursive (bool, optional): create object recursively
+            ignore_args (bool, optional): ignore arguments not in argument spec
 
         Returns an object (or function output)
         """
-        new_kwargs = {}
+        kwargs = copy.deepcopy(kwargs)
 
         for k, v in self.items():
-            if k != _KEY_OF_FUNC_OR_CLS:
-                new_kwargs[k] = v
+            if k not in kwargs and k != _KEY_OF_FUNC_OR_CLS:
+                kwargs[k] = v
 
         if recursive:
-            for k, v in new_kwargs.items():
-                if isinstance(v, Config):
-                    new_kwargs[k] = self.create_object(v, recursive=recursive)
+            for k, v in kwargs.items():
+                if isinstance(v, self.__class__):
+                    kwargs[k] = self.create_object(v, recursive=recursive, ignore_args=ignore_args)
 
-        new_kwargs.update(kwargs)
+        func_or_cls = _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]]
 
-        return _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
+        if ignore_args:
+            spec = inspect.signature(func_or_cls)
+            kwargs = {k: v for k, v in kwargs.items() if k in spec.parameters}
+
+        return func_or_cls(*args, **kwargs)
+
+    def merge_config(self, other, allow_new_key=False):
+        r"""Merge other config
+
+        Arguments:
+            allow_new_key (bool, optional): allow new key to merge
+        """
+        for key, value in other.items():
+            if key not in self.keys() and not allow_new_key:
+                raise ValueError('{} not found and new key is not allowed'.format(key))
+
+            if isinstance(value, self.__class__):
+                self[key].merge_config(value, allow_new_key)
+            else:
+                self[key] = value
 
 
 def _flatten(data, prefix=None, sep='.'):
