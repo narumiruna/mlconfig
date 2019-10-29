@@ -18,7 +18,30 @@ class Config(AttrDict):
         save_dict(self.to_dict(), f, **kwargs)
 
     def __call__(self, *args, **kwargs):
-        return create_object(self, *args, **kwargs)
+        return self.create_object(self, *args, **kwargs)
+
+    def create_object(self, *args, recursive=False, **kwargs):
+        r"""Create object (or get function output) from config
+
+        Arguments:
+            recursive (bool, optional): create object recursively
+
+        Returns an object (or function output)
+        """
+        new_kwargs = {}
+
+        for k, v in self.items():
+            if k != _KEY_OF_FUNC_OR_CLS:
+                new_kwargs[k] = v
+
+        if recursive:
+            for k, v in new_kwargs.items():
+                if isinstance(v, Config):
+                    new_kwargs[k] = self.create_object(v, recursive=recursive)
+
+        new_kwargs.update(kwargs)
+
+        return _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
 
 
 def _flatten(data, prefix=None, sep='.'):
@@ -52,33 +75,8 @@ def _replace(data, prefix='$'):
     return data
 
 
-def create_object(config: Config, *args, recursive=False, **kwargs):
-    r"""Create object (or get function output) from config
-
-    Arguments:
-        config (Config): config to create object
-        recursive (bool, optional): create object recursively
-
-    Returns an object (or function output)
-    """
-    new_kwargs = {}
-
-    for k, v in config.items():
-        if k != _KEY_OF_FUNC_OR_CLS:
-            new_kwargs[k] = v
-
-    if recursive:
-        for k, v in new_kwargs.items():
-            if isinstance(v, Config):
-                new_kwargs[k] = create_object(v, recursive=recursive)
-
-    new_kwargs.update(kwargs)
-
-    return _REGISTRY[config[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
-
-
 def load(f, replace_values=True):
-    r"""Load the configuration file
+    r"""Load configuration file
 
     Arguments:
         f (str): the configuration file
