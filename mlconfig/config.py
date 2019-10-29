@@ -40,7 +40,7 @@ class Config(AttrDict):
         if recursive:
             for k, v in kwargs.items():
                 if isinstance(v, self.__class__):
-                    kwargs[k] = self.create_object(v, recursive=recursive)
+                    kwargs[k] = self.create_object(v, recursive=recursive, ignore_args=ignore_args)
 
         func_or_cls = _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]]
 
