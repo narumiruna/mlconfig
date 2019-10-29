@@ -20,10 +20,17 @@ class TestConfig(unittest.TestCase):
     def test_create_object(self):
         a = 1
         b = 2
-        d = {'name': 'AddOperator', 'a': a, 'b': b}
-        config = Config(d)
+        config = Config(name='AddOperator', a=a, b=b)
 
         obj = config.create_object()
+        self.assertEqual(obj.add(), a + b)
+
+    def test_call(self):
+        a = 1
+        b = 2
+        config = Config(name='AddOperator', a=a, b=b)
+
+        obj = config()
         self.assertEqual(obj.add(), a + b)
 
     def test_merge_config(self):
