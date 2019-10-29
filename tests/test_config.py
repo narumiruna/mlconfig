@@ -1,3 +1,5 @@
+import os
+import tempfile
 import unittest
 
 import mlconfig
@@ -16,6 +18,41 @@ class AddOperator(object):
 
 
 class TestConfig(unittest.TestCase):
+
+    def setUp(self):
+        self.data = {
+            'trainer': {
+                'name': 'ImageClassificationTrainer',
+                'num_epochs': 20
+            },
+            'dataset': {
+                'name': 'MNISTDataloader',
+                'root': 'data',
+                'batch_size': 256,
+                'num_workers': 0
+            },
+            'model': {
+                'name': 'LeNet'
+            },
+            'optimizer': {
+                'name': 'Adam',
+                'lr': 1e-3
+            },
+            'scheduler': {
+                'name': 'StepLR',
+                'step_size': 10,
+                'gamma': 0.1
+            }
+        }
+        self.temp_dir = tempfile.gettempdir()
+
+    def test_save_and_load_config(self):
+        c1 = Config(self.data)
+        f = os.path.join(self.temp_dir, 'test_save.yaml')
+        c1.save(f)
+
+        c2 = mlconfig.load(f)
+        self.assertDictEqual(c1.to_dict(), c2.to_dict())
 
     def test_create_object(self):
         a = 1
