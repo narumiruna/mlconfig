@@ -51,10 +51,14 @@ class Config(AttrDict):
         return func_or_cls(*args, **kwargs)
 
     def merge_config(self, other, allow_new_key=False):
+        r"""Merge other config
+
+        Arguments:
+            allow_new_key (bool, optional): allow new key to merge
+        """
         for key, value in other.items():
-            if key not in self:
-                if not allow_new_key:
-                    raise ValueError('{} not found and new key is not allowed'.format(key))
+            if key not in self.keys() and not allow_new_key:
+                raise ValueError('{} not found and new key is not allowed'.format(key))
 
             if isinstance(value, self.__class__):
                 self[key].merge_config(value, allow_new_key)
