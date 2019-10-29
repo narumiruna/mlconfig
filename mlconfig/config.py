@@ -1,9 +1,8 @@
 import functools
+import inspect
 
 from .collections import AttrDict
 from .utils import load_dict, save_dict
-
-import inspect
 
 _REGISTRY = {}
 _KEY_OF_FUNC_OR_CLS = 'name'
@@ -45,7 +44,7 @@ class Config(AttrDict):
 
         return _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]](*args, **new_kwargs)
 
-    def merge_config(self, other, allow_new_key):
+    def merge_config(self, other, allow_new_key=False):
         for key, value in other.items():
             if key not in self:
                 if not allow_new_key:
@@ -55,10 +54,6 @@ class Config(AttrDict):
                 self[key].merge_config(value, allow_new_key)
             else:
                 self[key] = value
-
-    def merge_from_config_file(self, f: str, replace_values=True, allow_new_key=False):
-        other = load(f, replace_values=replace_values)
-        self.merge_config(other, allow_new_key)
 
 
 def _flatten(data, prefix=None, sep='.'):
