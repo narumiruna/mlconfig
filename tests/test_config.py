@@ -21,5 +21,5 @@ class TestConfig(unittest.TestCase):
         d = {'name': 'AddOperator', 'a': a, 'b': b}
         config = mlconfig.Config(d)
 
-        obj = mlconfig.create_object(config)
+        obj = config.create_object()
         self.assertEqual(obj.add(), a + b)
