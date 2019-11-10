@@ -23,3 +23,17 @@ class TestAttrDict(unittest.TestCase):
         d.b = 1
 
         self.assertEqual(d.to_dict(), d)
+
+    def test_immutable(self):
+        d = AttrDict()
+        d.set_immutable()
+
+        with self.assertRaises(AttributeError):
+            d.a = 0
+
+    def test_is_immutable(self):
+        d = AttrDict(a=0, b=1)
+        self.assertFalse(d.is_immutable())
+
+        d.set_immutable()
+        self.assertTrue(d.is_immutable())
