@@ -83,3 +83,11 @@ class TestConfig(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             c1.merge_config(c2, allow_new_key=False)
+
+    def test_instantiate(self):
+        a = 1
+        b = 2
+        config = Config(name='AddOperator', a=a, b=b)
+
+        obj = mlconfig.instantiate(config)
+        self.assertEqual(obj.add(), a + b)
