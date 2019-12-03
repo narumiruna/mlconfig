@@ -146,7 +146,7 @@ def set_key_of_func_or_cls(key: str):
     _KEY_OF_FUNC_OR_CLS = key
 
 
-def instantiate(config, *args, ignore_args=False, **kwargs):
+def instantiate(config, *args, **kwargs):
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in config.items():
@@ -154,9 +154,5 @@ def instantiate(config, *args, ignore_args=False, **kwargs):
             kwargs[k] = v
 
     func_or_cls = _REGISTRY[config[_KEY_OF_FUNC_OR_CLS]]
-
-    if ignore_args:
-        spec = inspect.signature(func_or_cls)
-        kwargs = {k: v for k, v in kwargs.items() if k in spec.parameters}
 
     return func_or_cls(*args, **kwargs)
