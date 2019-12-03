@@ -1,6 +1,7 @@
 import copy
 import functools
 import inspect
+import warnings
 
 from .collections import AttrDict
 from .utils import load_dict, save_dict
@@ -12,6 +13,7 @@ _KEY_OF_FUNC_OR_CLS = 'name'
 class Config(AttrDict):
 
     def __call__(self, *args, **kwargs):
+        warnings.warn('Config.__call__ will be deprecated, use instantiate instead')
         return self.create_object(*args, **kwargs)
 
     def save(self, f, **kwargs):
@@ -144,3 +146,15 @@ def register(func_or_cls=None, name: str = None):
 def set_key_of_func_or_cls(key: str):
     global _KEY_OF_FUNC_OR_CLS
     _KEY_OF_FUNC_OR_CLS = key
+
+
+def instantiate(config, *args, **kwargs):
+    kwargs = copy.deepcopy(kwargs)
+
+    for k, v in config.items():
+        if k not in kwargs and k != _KEY_OF_FUNC_OR_CLS:
+            kwargs[k] = v
+
+    func_or_cls = _REGISTRY[config[_KEY_OF_FUNC_OR_CLS]]
+
+    return func_or_cls(*args, **kwargs)
