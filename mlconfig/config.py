@@ -1,6 +1,7 @@
 import copy
 import functools
 import inspect
+import warnings
 
 from .collections import AttrDict
 from .utils import load_dict, save_dict
@@ -12,6 +13,7 @@ _KEY_OF_FUNC_OR_CLS = 'name'
 class Config(AttrDict):
 
     def __call__(self, *args, **kwargs):
+        warnings.warn('Config.__call__ will be deprecated, use instantiate instead')
         return self.create_object(*args, **kwargs)
 
     def save(self, f, **kwargs):
