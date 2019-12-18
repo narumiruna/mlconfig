@@ -149,6 +149,13 @@ def set_key_of_func_or_cls(key: str):
 
 
 def instantiate(config, *args, **kwargs):
+    r"""Create object (or get function output) from config
+
+    Arguments:
+        config (Config): the config to create object
+
+    Returns an object (or function output)
+    """
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in config.items():
