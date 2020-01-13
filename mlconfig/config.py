@@ -98,14 +98,18 @@ def _replace(data, prefix='$'):
     return data
 
 
-def load(f, replace_values=True):
+def load(f_or_dict, replace_values=True):
     r"""Load configuration file
 
     Arguments:
-        f (str): the configuration file
+        f_or_dict (str, dict): the configuration file or dict
         replace_values (bool, optional): replace the values with prefix $
     """
-    data = load_dict(f)
+    if not isinstance(f_or_dict, (str, dict)):
+        raise TypeError('f_or_dict should be str or dict')
+
+    if isinstance(f_or_dict, str):
+        data = load_dict(f_or_dict)
 
     if replace_values:
         data = _replace(data)
