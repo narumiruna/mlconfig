@@ -115,7 +115,6 @@ def load(f_or_dict, replace_values=True):
         data = _replace(data)
 
     config = Config(data)
-    config.set_immutable()
     return config
 
 
