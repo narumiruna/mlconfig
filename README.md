@@ -66,6 +66,7 @@ class LeNet(nn.Module):
 
 def main():
     config = mlconfig.load('config.yaml')
+    config.set_immutable()
 
     model = config.model()
     optimizer = config.optimizer(model.parameters())
