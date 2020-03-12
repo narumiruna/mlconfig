@@ -70,19 +70,19 @@ class TestConfig(unittest.TestCase):
         obj = config()
         self.assertEqual(obj.add(), a + b)
 
-    def test_merge_config(self):
+    def test_merge(self):
         c1 = Config(a=1, b=2)
         c2 = Config(b=3, c=4)
 
-        c1.merge_config(c2, allow_new_key=True)
+        c1.merge(c2, allow_new_key=True)
         self.assertDictEqual(c1.to_dict(), dict(a=1, b=3, c=4))
 
-    def test_merge_config_allow_new_key(self):
+    def test_merge_allow_new_key(self):
         c1 = Config(a=1, b=2)
         c2 = Config(b=3, c=4)
 
         with self.assertRaises(ValueError):
-            c1.merge_config(c2, allow_new_key=False)
+            c1.merge(c2, allow_new_key=False)
 
     def test_instantiate(self):
         a = 1
