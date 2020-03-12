@@ -1,6 +1,7 @@
 import copy
 import functools
 import inspect
+from typing import Union
 
 from .collections import AttrDict
 from .utils import load_dict
@@ -51,7 +52,7 @@ class Config(AttrDict):
 
         return func_or_cls(*args, **kwargs)
 
-    def merge_config(self, other, allow_new_key=False):
+    def merge(self, other, allow_new_key=False):
         r"""Merge other config
 
         Arguments:
@@ -62,9 +63,13 @@ class Config(AttrDict):
                 raise ValueError('{} not found and new key is not allowed'.format(key))
 
             if isinstance(value, self.__class__):
-                self[key].merge_config(value, allow_new_key)
+                self[key].merge(value, allow_new_key)
             else:
                 self[key] = value
+
+    def merge_from_file(self, f: str, allow_new_key=False):
+        config = load(f)
+        self.merge(config, allow_new_key)
 
 
 def _flatten(data, prefix=None, sep='.'):
@@ -98,18 +103,19 @@ def _replace(data, prefix='$'):
     return data
 
 
-def load(f_or_dict, replace_values=True):
+def load(f_or_dict: Union[str, dict], replace_values=True):
     r"""Load configuration file
 
     Arguments:
         f_or_dict (str, dict): the configuration file or dict
         replace_values (bool, optional): replace the values with prefix $
     """
-    if not isinstance(f_or_dict, (str, dict)):
-        raise TypeError('f_or_dict should be str or dict')
-
     if isinstance(f_or_dict, str):
         data = load_dict(f_or_dict)
+    elif isinstance(f_or_dict, dict):
+        data = f_or_dict
+    else:
+        raise TypeError('f_or_dict should be str or dict')
 
     if replace_values:
         data = _replace(data)
