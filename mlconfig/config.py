@@ -14,7 +14,7 @@ _KEY_OF_FUNC_OR_CLS = 'name'
 class Config(AttrDict):
 
     def __call__(self, *args, **kwargs):
-        return self.create_object(*args, **kwargs)
+        return self.instantiate(*args, **kwargs)
 
     def save(self, f, **kwargs):
         r"""Save configuration file
@@ -24,7 +24,7 @@ class Config(AttrDict):
         """
         save_dict(self.to_dict(), f, **kwargs)
 
-    def create_object(self, *args, recursive=False, ignore_args=False, **kwargs):
+    def instantiate(self, *args, recursive=False, ignore_args=False, **kwargs):
         r"""Create object (or get function output) from config
 
         Arguments:
@@ -42,7 +42,7 @@ class Config(AttrDict):
         if recursive:
             for k, v in kwargs.items():
                 if isinstance(v, self.__class__):
-                    kwargs[k] = v.create_object(recursive=recursive, ignore_args=ignore_args)
+                    kwargs[k] = v.instantiate(recursive=recursive, ignore_args=ignore_args)
 
         func_or_cls = _REGISTRY[self[_KEY_OF_FUNC_OR_CLS]]
 

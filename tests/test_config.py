@@ -54,12 +54,12 @@ class TestConfig(unittest.TestCase):
         c2 = mlconfig.load(f)
         self.assertDictEqual(c1.to_dict(), c2.to_dict())
 
-    def test_create_object(self):
+    def test_instantiate(self):
         a = 1
         b = 2
         config = Config(name='AddOperator', a=a, b=b)
 
-        obj = config.create_object()
+        obj = config.instantiate()
         self.assertEqual(obj.add(), a + b)
 
     def test_call(self):
