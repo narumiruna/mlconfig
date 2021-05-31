@@ -154,22 +154,3 @@ def register(func_or_cls=None, name: str = None):
 def set_key_of_func_or_cls(key: str):
     global _KEY_OF_FUNC_OR_CLS
     _KEY_OF_FUNC_OR_CLS = key
-
-
-def instantiate(config, *args, **kwargs):
-    r"""Create object (or get function output) from config
-
-    Arguments:
-        config (Config): the config to create object
-
-    Returns an object (or function output)
-    """
-    kwargs = copy.deepcopy(kwargs)
-
-    for k, v in config.items():
-        if k not in kwargs and k != _KEY_OF_FUNC_OR_CLS:
-            kwargs[k] = v
-
-    func_or_cls = _REGISTRY[config[_KEY_OF_FUNC_OR_CLS]]
-
-    return func_or_cls(*args, **kwargs)
