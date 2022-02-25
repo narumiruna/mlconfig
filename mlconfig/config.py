@@ -1,7 +1,8 @@
 import copy
 import functools
 import inspect
-from typing import Union, Any
+from typing import Any
+from typing import Union
 
 from .collections import AttrDict
 from .utils import load_dict
