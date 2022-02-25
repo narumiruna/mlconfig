@@ -1,6 +1,7 @@
 import copy
 import functools
 import inspect
+from typing import Any
 from typing import Union
 
 from .collections import AttrDict
@@ -13,10 +14,10 @@ _KEY_OF_FUNC_OR_CLS = 'name'
 
 class Config(AttrDict):
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> Any:
         return self.instantiate(*args, **kwargs)
 
-    def save(self, f, **kwargs):
+    def save(self, f: str, **kwargs) -> None:
         r"""Save configuration file
 
         Arguments:
@@ -24,7 +25,7 @@ class Config(AttrDict):
         """
         save_dict(self.to_dict(), f, **kwargs)
 
-    def instantiate(self, *args, recursive=False, ignore_args=False, **kwargs):
+    def instantiate(self, *args, recursive=False, ignore_args=False, **kwargs) -> Any:
         r"""Create object (or get function output) from config
 
         Arguments:
@@ -52,7 +53,7 @@ class Config(AttrDict):
 
         return func_or_cls(*args, **kwargs)
 
-    def merge(self, other, allow_new_key=False):
+    def merge(self, other, allow_new_key=False) -> None:
         r"""Merge other config
 
         Arguments:
@@ -67,12 +68,12 @@ class Config(AttrDict):
             else:
                 self[key] = value
 
-    def merge_from_file(self, f: str, allow_new_key=False):
+    def merge_from_file(self, f: str, allow_new_key=False) -> None:
         config = load(f)
         self.merge(config, allow_new_key)
 
 
-def _flatten(data, prefix=None, sep='.'):
+def _flatten(data: dict, prefix=None, sep='.'):
     d = {}
 
     for key, value in data.items():
@@ -87,7 +88,7 @@ def _flatten(data, prefix=None, sep='.'):
     return d
 
 
-def _replace(data, prefix='$'):
+def _replace(data: dict, prefix='$'):
     m = _flatten(data)
 
     def replace(d):
@@ -103,7 +104,7 @@ def _replace(data, prefix='$'):
     return data
 
 
-def load(f_or_dict: Union[str, dict], replace_values=True):
+def load(f_or_dict: Union[str, dict], replace_values=True) -> Config:
     r"""Load configuration file
 
     Arguments:
@@ -151,6 +152,6 @@ def register(func_or_cls=None, name: str = None):
     return _register(func_or_cls, name=name)
 
 
-def set_key_of_func_or_cls(key: str):
+def set_key_of_func_or_cls(key: str) -> None:
     global _KEY_OF_FUNC_OR_CLS
     _KEY_OF_FUNC_OR_CLS = key

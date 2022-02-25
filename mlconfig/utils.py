@@ -1,6 +1,6 @@
 import json
 import os
-from collections.abc import Sequence
+from collections import Sequence
 
 import yaml
 
@@ -19,7 +19,7 @@ def load_json(f: str) -> dict:
         return json.load(fp)
 
 
-def save_json(data: dict, f: str, **kwargs):
+def save_json(data: dict, f: str, **kwargs) -> None:
     with open(f, 'w') as fp:
         json.dump(data, fp, **kwargs)
 
@@ -29,7 +29,7 @@ def load_yaml(f: str) -> dict:
         return yaml.safe_load(fp)
 
 
-def save_yaml(data: dict, f: str, **kwargs):
+def save_yaml(data: dict, f: str, **kwargs) -> None:
     with open(f, 'w') as fp:
         yaml.safe_dump(data, stream=fp, **kwargs)
 
@@ -45,7 +45,7 @@ def load_dict(f: str) -> dict:
     return data
 
 
-def save_dict(data: dict, f: str, **kwargs):
+def save_dict(data: dict, f: str, **kwargs) -> None:
     if isextension(f, ('.yaml', '.yml')):
         save_yaml(data, f, **kwargs)
     elif isextension(f, '.json'):
