@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "mlconfig"
+version = "0.1.2"
+description = ""
+authors = ["なるみ <toucans-cutouts0f@icloud.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+PyYAML = "^6.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
