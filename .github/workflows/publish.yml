@@ -1,25 +1,27 @@
-name: Publish package
+name: Publish
 
 on:
   push:
     tags:
-      - v*
+      - 'v*.*.*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      - name: Upgrade pip
+        run: pip install -U pip
       - name: Install poetry
         run: pip install -U poetry
       - name: Build
         run: poetry build
       - name: Publish
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         env: 
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: poetry publish -u __token__ -p $PYPI_TOKEN
