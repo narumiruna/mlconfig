@@ -155,3 +155,7 @@ def register(func_or_cls=None, name: str = None):
 def set_key_of_func_or_cls(key: str) -> None:
     global _KEY_OF_FUNC_OR_CLS
     _KEY_OF_FUNC_OR_CLS = key
+
+
+def getcls(config: Config):
+    return _REGISTRY[config.name]
