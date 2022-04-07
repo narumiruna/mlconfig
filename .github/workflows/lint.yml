@@ -2,8 +2,9 @@ name: Lint
 
 on:
   push:
-    - master
-  pull_request:
+    branches:
+      - master
+    pull_request:
 
 jobs:
   build:
