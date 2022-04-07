@@ -21,9 +21,7 @@ jobs:
         run: pip install -U pip
       - name: Install poetry
         run: pip install -U poetry
-      - name: Build
-        run: poetry build
       - name: Publish
         env: 
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish -u __token__ -p $PYPI_TOKEN
+        run: poetry publish -u __token__ -p $PYPI_TOKEN --build
