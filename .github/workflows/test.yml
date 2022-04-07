@@ -17,10 +17,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Upgrade pip
-        run: pip install -U pip
-      - name: Install package
-        run: pip install .
       - name: Test
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
