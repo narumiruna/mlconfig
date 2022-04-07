@@ -6,7 +6,7 @@ authors = ["なるみ <toucans-cutouts0f@icloud.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = "^3.6"
 PyYAML = "^6.0"
 
 [tool.poetry.dev-dependencies]
