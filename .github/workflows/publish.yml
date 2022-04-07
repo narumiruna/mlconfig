@@ -15,11 +15,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Upgrade pip
-        run: pip install -U pip
-      - name: Install poetry
-        run: pip install -U poetry
       - name: Publish
         env: 
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish -u __token__ -p $PYPI_TOKEN --build
+        run: |
+          pip install poetry
+          poetry build -f wheel
+          poetry publish -u __token__ -p $PYPI_TOKEN
