@@ -83,3 +83,18 @@ class TestConfig(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             c1.merge(c2, allow_new_key=False)
+
+    def test_variable_expansion(self):
+        data = self.data.copy()
+        data['num_classes'] = 50
+        data['model']['num_classes'] = '$num_classes'
+
+        data['prefix'] = '/usr/share'
+        data['dataset']['root'] = '$prefix/data'
+
+        data['output'] = '$prefix/${model.name}'
+
+        config = mlconfig.load(data)
+        self.assertEqual(config['model']['num_classes'], 50)
+        self.assertEqual(config['dataset']['root'], '/usr/share/data')
+        self.assertEqual(config['output'], '/usr/share/LeNet')
