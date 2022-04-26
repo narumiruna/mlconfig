@@ -21,7 +21,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
         run: |
-          pip install .          
-          pip install codecov
-          coverage run -m unittest discover tests --verbose
+          pip install .
+          pip install codecov pytest
+          coverage run -m pytest -v -s tests
           codecov
