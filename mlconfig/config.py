@@ -92,10 +92,6 @@ def _flatten(data: dict, prefix=None, sep='.'):
 def _replace(data: dict, prefix='$'):
     m = _flatten(data)
 
-    # Allow access of sub-values with ${…}, e.g. ${foo.bar}
-    class ValueExpansion(Template):
-        braceidpattern = r"(?a:[_a-z][_a-z0-9.]*)"
-
     def replace(d: dict):
         for key, value in d.items():
             if isinstance(value, str):
@@ -103,6 +99,10 @@ def _replace(data: dict, prefix='$'):
 
             if isinstance(value, dict):
                 replace(value)
+
+    # Allow access of sub-values with ${…}, e.g. ${foo.bar}
+    class ValueExpansion(Template):
+        braceidpattern = r"(?a:[_a-z][_a-z0-9.]*)"
 
     def expand_value(d: dict, key: str, value: str):
         template = ValueExpansion(value)
