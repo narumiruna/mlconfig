@@ -96,19 +96,24 @@ def _replace(data: dict, prefix='$'):
     class ValueExpansion(Template):
         braceidpattern = r"(?a:[_a-z][_a-z0-9.]*)"
 
-    def replace(d):
+    def replace(d: dict):
         for key, value in d.items():
             if isinstance(value, str):
-                if value.startswith(prefix):
-                    try:
-                        d[key] = m[value.lstrip(prefix)]
-                    except KeyError:
-                        d[key] = ValueExpansion(value).substitute(m)
-                else:
-                    d[key] = ValueExpansion(value).substitute(m)
+                expand_value(d, key, value)
 
             if isinstance(value, dict):
                 replace(value)
+
+    def expand_value(d: dict, key: str, value: str):
+        template = ValueExpansion(value)
+
+        if value.startswith(prefix):
+            try:
+                d[key] = m[value.lstrip(prefix)]
+            except KeyError:
+                d[key] = template.substitute(m)
+        else:
+            d[key] = template.substitute(m)
 
     replace(data)
 
