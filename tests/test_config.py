@@ -21,18 +21,22 @@ class AddOperator(object):
 @pytest.fixture
 def raw_config():
     return {
+        'num_classes': 50,
+        'root': '/path/to/repo',
+        'output': '$root/${model.name}',
         'trainer': {
             'name': 'ImageClassificationTrainer',
             'num_epochs': 20
         },
         'dataset': {
             'name': 'MNISTDataloader',
-            'root': 'data',
+            'root': '$root/data',
             'batch_size': 256,
             'num_workers': 0
         },
         'model': {
-            'name': 'LeNet'
+            'name': 'LeNet',
+            'num_classes': '$num_classes'
         },
         'optimizer': {
             'name': 'Adam',
@@ -47,7 +51,7 @@ def raw_config():
 
 
 def test_config_save_and_load(raw_config):
-    c1 = Config(raw_config)
+    c1 = mlconfig.load(raw_config)
     f = os.path.join(gettempdir(), 'test_save.yaml')
     c1.save(f)
 
@@ -90,16 +94,7 @@ def test_config_merge_allow_new_key():
 
 
 def test_variable_expansion(raw_config):
-    data = raw_config.copy()
-    data['num_classes'] = 50
-    data['model']['num_classes'] = '$num_classes'
+    config = mlconfig.load(raw_config)
 
-    data['prefix'] = '/usr/share'
-    data['dataset']['root'] = '$prefix/data'
-
-    data['output'] = '$prefix/${model.name}'
-
-    config = mlconfig.load(data)
-    assert config['model']['num_classes'] == 50
-    assert config['dataset']['root'] == '/usr/share/data'
-    assert config['output'] == '/usr/share/LeNet'
+    assert config['dataset']['root'] == f'{config.root}/data'
+    assert config['output'] == f'{config.root}/{config.model.name}'
