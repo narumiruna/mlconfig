@@ -1,5 +1,7 @@
+VERSION := $(shell poetry version -s)
+
 tag:
-	git tag v$(poetry version -s) && git push origin v$(poetry version -s)
+	git tag v${VERSION} && git push origin v${VERSION}
 
 test:
 	poetry run pytest -v -s tests
