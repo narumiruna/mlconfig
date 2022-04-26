@@ -1,6 +1,7 @@
 import copy
 import functools
 import inspect
+from string import Template
 from typing import Any
 from typing import Union
 
@@ -91,10 +92,20 @@ def _flatten(data: dict, prefix=None, sep='.'):
 def _replace(data: dict, prefix='$'):
     m = _flatten(data)
 
+    # Allow access of sub-values with ${…}, e.g. ${foo.bar}
+    class ValueExpansion(Template):
+        braceidpattern = r"(?a:[_a-z][_a-z0-9.]*)"
+
     def replace(d):
         for key, value in d.items():
-            if isinstance(value, str) and value.startswith(prefix):
-                d[key] = m[value.lstrip(prefix)]
+            if isinstance(value, str):
+                if value.startswith(prefix):
+                    try:
+                        d[key] = m[value.lstrip(prefix)]
+                    except KeyError:
+                        d[key] = ValueExpansion(value).substitute(m)
+                else:
+                    d[key] = ValueExpansion(value).substitute(m)
 
             if isinstance(value, dict):
                 replace(value)
