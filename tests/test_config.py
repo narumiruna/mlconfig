@@ -98,3 +98,8 @@ def test_variable_expansion(raw_config):
 
     assert config['dataset']['root'] == f'{config.root}/data'
     assert config['output'] == f'{config.root}/{config.model.name}'
+
+
+def test_getcls():
+    config = Config(name='AddOperator', a=1, b=2)
+    assert mlconfig.getcls(config) == AddOperator
