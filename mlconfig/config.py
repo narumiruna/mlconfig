@@ -26,12 +26,18 @@ class Config(AttrDict):
         """
         save_dict(self.to_dict(), f, **kwargs)
 
-    def instantiate(self, *args, recursive=False, ignore_args=False, **kwargs) -> Any:
+    def instantiate(self,
+                    *args,
+                    recursive: bool = False,
+                    ignore_args: bool = False,
+                    classmethod: str = None,
+                    **kwargs) -> Any:
         r"""Create object (or get function output) from config
 
         Arguments:
             recursive (bool, optional): create object recursively
             ignore_args (bool, optional): ignore arguments not in argument spec
+            classmethod (str, optional): use classmethod to instantiate
 
         Returns an object (or function output)
         """
@@ -51,6 +57,9 @@ class Config(AttrDict):
         if ignore_args:
             spec = inspect.signature(func_or_cls)
             kwargs = {k: v for k, v in kwargs.items() if k in spec.parameters}
+
+        if classmethod is not None:
+            return getattr(func_or_cls, classmethod)(*args, **kwargs)
 
         return func_or_cls(*args, **kwargs)
 

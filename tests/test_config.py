@@ -17,6 +17,10 @@ class AddOperator(object):
     def add(self):
         return self.a + self.b
 
+    @classmethod
+    def calculate(cls, **kwargs):
+        return cls(**kwargs).add()
+
 
 @pytest.fixture
 def raw_config():
@@ -103,3 +107,8 @@ def test_variable_expansion(raw_config):
 def test_getcls():
     config = Config(name='AddOperator', a=1, b=2)
     assert mlconfig.getcls(config) == AddOperator
+
+
+def test_config_classmethod():
+    config = Config(name='AddOperator', a=1, b=2)
+    assert config(classmethod='calculate') == 1 + 2
