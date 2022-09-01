@@ -1,4 +1,7 @@
-class AttrDict(dict):
+from collections import OrderedDict
+
+
+class AttrDict(OrderedDict):
     IMMUTABLE = '__immutable__'
 
     def __init__(self, *args, **kwargs):
@@ -44,7 +47,7 @@ class AttrDict(dict):
         return self.__dict__[AttrDict.IMMUTABLE]
 
     def to_dict(self):
-        data = {}
+        data = OrderedDict()
 
         for key, value in self.items():
             if isinstance(value, AttrDict):
@@ -55,7 +58,7 @@ class AttrDict(dict):
         return data
 
     def flat(self, prefix=None, sep='.'):
-        data = {}
+        data = OrderedDict()
 
         for key, value in self.items():
             if prefix is not None:
