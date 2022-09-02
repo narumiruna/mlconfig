@@ -2,7 +2,7 @@ import json
 import os
 from collections.abc import Sequence
 
-import yaml
+import oyaml as yaml
 
 
 def isextension(f: str, ext) -> bool:

@@ -1,6 +1,7 @@
 import copy
 import functools
 import inspect
+from collections import OrderedDict
 from string import Template
 from typing import Any
 from typing import Union
@@ -84,7 +85,7 @@ class Config(AttrDict):
 
 
 def _flatten(data: dict, prefix=None, sep='.'):
-    d = {}
+    d = OrderedDict()
 
     for key, value in data.items():
         if prefix is not None:
