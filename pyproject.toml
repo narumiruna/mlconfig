@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mlconfig"
-version = "0.1.7"
+version = "0.1.8"
 description = ""
 authors = ["なるみ <toucans-cutouts0f@icloud.com>"]
 license = "MIT"
