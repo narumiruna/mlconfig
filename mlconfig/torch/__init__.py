@@ -22,6 +22,12 @@ def _register_classes(module, superclass, prefix=None, sep='.'):
             mlconfig.register(attr, name=name)
 
 
+def get_lr_scheduler_class():
+    # PyTorch 2.0 renamed LRScheduler to _LRScheduler
+    name = 'LRScheduler' if hasattr(optim.lr_scheduler, 'LRScheduler') else '_LRScheduler'
+    return getattr(optim.lr_scheduler, name)
+
+
 register_torch_optimizers = functools.partial(
     _register_classes,
     module=optim,
@@ -31,5 +37,5 @@ register_torch_optimizers = functools.partial(
 register_torch_schedulers = functools.partial(
     _register_classes,
     module=optim.lr_scheduler,
-    superclass=optim.lr_scheduler._LRScheduler,
+    superclass=get_lr_scheduler_class(),
 )
