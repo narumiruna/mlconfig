@@ -1,29 +1,3 @@
-# mlconfig
-
-## Installation
-
-```shell
-$ pip install mlconfig
-```
-
-## Example
-
-[config.yaml](example/conf.yaml)
-```yaml
-num_classes: 50
-
-model:
-  name: LeNet
-  num_classes: ${num_classes}
-
-optimizer:
-  name: Adam
-  lr: 1.e-3
-  weight_decay: 1.e-4
-```
-
-[main.py](example/main.py)
-```python
 from torch import nn
 from torch import optim
 
@@ -70,8 +44,8 @@ def main():
 
     model = instantiate(config.model)
     optimizer = instantiate(config.optimizer, model.parameters())
+    print(optimizer)
 
 
 if __name__ == '__main__':
     main()
-```
