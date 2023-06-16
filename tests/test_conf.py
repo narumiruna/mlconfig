@@ -26,7 +26,7 @@ def add(x, y):
 
 
 @pytest.fixture
-def d():
+def obj():
     return {
         'x1': 1,
         'x2': 2,
@@ -47,22 +47,22 @@ def d():
 
 
 @pytest.fixture
-def c(d):
-    return load(obj=d)
+def conf(obj):
+    return load(obj=obj)
 
 
-def test_instantiate(c, d):
-    assert c['x1'] == c['a']['x'] == c['b']['x'] == d['x1']
-    assert c['x1'] == c['b']['x'] == c['b']['x'] == d['x1']
+def test_instantiate(conf, obj):
+    assert conf['x1'] == conf['a']['x'] == conf['b']['x'] == obj['x1']
+    assert conf['x1'] == conf['b']['x'] == conf['b']['x'] == obj['x1']
 
-    instantiate(c.a)
+    instantiate(conf.a)
 
-    a = instantiate(c.a)
-    b = instantiate(c.b)
-    c = instantiate(c.op, a, b)
-    assert c.x == 2 * d['x1']
-    assert c.y == d['a']['y'] + d['b']['y']
+    a = instantiate(conf.a)
+    b = instantiate(conf.b)
+    conf = instantiate(conf.op, a, b)
+    assert conf.x == 2 * obj['x1']
+    assert conf.y == obj['a']['y'] + obj['b']['y']
 
 
-def test_getcls(c, d):
-    assert getcls(c['a']) == Point
+def test_getcls(conf):
+    assert getcls(conf['a']) == Point
