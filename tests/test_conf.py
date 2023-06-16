@@ -1,3 +1,6 @@
+import pytest
+
+from mlconfig import getcls
 from mlconfig import instantiate
 from mlconfig import load
 from mlconfig import register
@@ -22,8 +25,9 @@ def add(x, y):
     return x + y
 
 
-def test_instantiate():
-    d = {
+@pytest.fixture
+def d():
+    return {
         'x1': 1,
         'x2': 2,
         'a': {
@@ -40,7 +44,14 @@ def test_instantiate():
             'name': 'add'
         }
     }
-    c = load(obj=d)
+
+
+@pytest.fixture
+def c(d):
+    return load(obj=d)
+
+
+def test_instantiate(c, d):
     assert c['x1'] == c['a']['x'] == c['b']['x'] == d['x1']
     assert c['x1'] == c['b']['x'] == c['b']['x'] == d['x1']
 
@@ -51,3 +62,7 @@ def test_instantiate():
     c = instantiate(c.op, a, b)
     assert c.x == 2 * d['x1']
     assert c.y == d['a']['y'] + d['b']['y']
+
+
+def test_getcls(c, d):
+    assert getcls(c['a']) == Point
