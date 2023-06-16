@@ -1,0 +1,10 @@
+num_classes: 50
+
+model:
+  name: LeNet
+  num_classes: ${num_classes}
+
+optimizer:
+  name: Adam
+  lr: 1.e-3
+  weight_decay: 1.e-4

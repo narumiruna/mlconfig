@@ -19,7 +19,7 @@ def _register_classes(module, superclass, prefix=None, sep='.'):
             if prefix is not None:
                 name = prefix + sep + name
 
-            mlconfig.register(attr, name=name)
+            mlconfig.conf(attr, name=name)
 
 
 def get_lr_scheduler_class():
