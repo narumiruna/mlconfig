@@ -1,27 +1,42 @@
-name: Test
+name: Python
 
 on:
   push:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+  
     strategy:
       max-parallel: 1
       matrix:
         python-version: [3.9]
+        poetry-version: [1.5.1]
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - name: Checkout
+        uses: actions/checkout@v3.5.3
+
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+          
+      - name: Setup Python
+        uses: actions/setup-python@v3.1.4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Lint
+        run: poetry run flake8 -v
+
       - name: Test
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
         run: |
-          pip install .
-          pip install codecov pytest
-          coverage run -m pytest -v -s tests
-          codecov
+          poetry run coverage run -m pytest -v -s tests
+          poetry run codecov
