@@ -8,17 +8,31 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.9]
+        poetry-version: [1.5.1]
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Checkout
+        uses: actions/checkout@v3.5.3
+
+      - name: Set up Poetry
+        uses: abatilo/actions-poetry@v2
         with:
-          python-version: 3.9
+          poetry-version: ${{ matrix.poetry-version }}
+          
+      - name: Setup Python
+        uses: actions/setup-python@v3.1.4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+
       - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          pip install poetry
           poetry build -f wheel
           poetry publish -u __token__ -p $PYPI_TOKEN
