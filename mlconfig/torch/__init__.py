@@ -5,10 +5,10 @@ import mlconfig
 try:
     from torch import optim
 except ImportError:
-    print('Failed to import torch.')
+    print("Failed to import torch.")
 
 
-def _register_classes(module, superclass, prefix=None, sep='.'):
+def _register_classes(module, superclass, prefix=None, sep="."):
     for name in dir(module):
         attr = getattr(module, name)
 
@@ -24,7 +24,9 @@ def _register_classes(module, superclass, prefix=None, sep='.'):
 
 def get_lr_scheduler_class():
     # PyTorch 2.0 renamed LRScheduler to _LRScheduler
-    name = 'LRScheduler' if hasattr(optim.lr_scheduler, 'LRScheduler') else '_LRScheduler'
+    name = (
+        "LRScheduler" if hasattr(optim.lr_scheduler, "LRScheduler") else "_LRScheduler"
+    )
     return getattr(optim.lr_scheduler, name)
 
 

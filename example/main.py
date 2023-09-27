@@ -10,7 +10,6 @@ register(optim.Adam)
 
 @register
 class LeNet(nn.Module):
-
     def __init__(self, num_classes):
         super(LeNet, self).__init__()
         self.num_classes = num_classes
@@ -40,12 +39,12 @@ class LeNet(nn.Module):
 
 
 def main():
-    config = load('conf.yaml')
+    config = load("conf.yaml")
 
     model = instantiate(config.model)
     optimizer = instantiate(config.optimizer, model.parameters())
     print(optimizer)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
