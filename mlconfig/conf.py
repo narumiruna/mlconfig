@@ -4,7 +4,7 @@ import functools
 from omegaconf import OmegaConf
 
 _REGISTRY = {}
-_KEY_OF_FUNC_OR_CLS = 'name'
+_KEY_OF_FUNC_OR_CLS = "name"
 
 
 def load(f=None, obj=None) -> OmegaConf:
@@ -29,7 +29,7 @@ def load(f=None, obj=None) -> OmegaConf:
 
     length = len(configs)
     if length == 0:
-        raise ValueError('No configuration file or structured object provided.')
+        raise ValueError("No configuration file or structured object provided.")
     elif length == 1:
         return configs[0]
 
@@ -53,7 +53,7 @@ def register(func_or_cls=None, name: str = None):
         if name not in _REGISTRY:
             _REGISTRY[name] = func_or_cls
         else:
-            raise ValueError('duplicate name {} found'.format(name))
+            raise ValueError("duplicate name {} found".format(name))
 
         return func_or_cls
 
