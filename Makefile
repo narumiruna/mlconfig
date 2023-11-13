@@ -1,7 +1,8 @@
-VERSION := $(shell poetry version -s)
+install:
+	poetry install
 
-tag:
-	git tag v${VERSION} && git push origin v${VERSION}
+lint:
+	poetry run flake8 -v
 
 test:
-	poetry run pytest -v -s tests
+	poetry run pytest -v -s --cov=mlconfig tests

@@ -8,28 +8,20 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     strategy:
       max-parallel: 1
       matrix:
         python-version: [3.9]
-        poetry-version: [1.6.1]
-
+        poetry-version: [1.7.0]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Poetry
-        uses: abatilo/actions-poetry@v2
+      - uses: actions/checkout@v4
+      - uses: abatilo/actions-poetry@v2
         with:
           poetry-version: ${{ matrix.poetry-version }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
-
       - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
