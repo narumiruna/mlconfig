@@ -2,7 +2,7 @@
 name = "mlconfig"
 version = "0.2.0"
 description = ""
-authors = ["なるみ <toucans-cutouts0f@icloud.com>"]
+authors = ["narumi <toucans-cutouts0f@icloud.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
@@ -10,14 +10,37 @@ python = "^3.9"
 omegaconf = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.11.0"
 codecov = "^2.1.13"
-flake8 = "^6.1.0"
-isort = "^5.12.0"
 pytest = "^7.4.3"
 pytest-cov = "^4.1.0"
+ruff = "^0.2.0"
 toml = "^0.10.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+exclude = ["build"]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "B", # flake8-bugbear
+    "C", # flake8-comprehensions
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # isort
+    # "UP", # pyupgrade
+    "W", # pycodestyle warnings
+
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.pytest.ini_options]
+filterwarnings = ["ignore::DeprecationWarning"]
