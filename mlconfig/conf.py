@@ -3,8 +3,8 @@ import functools
 
 from omegaconf import OmegaConf
 
-_REGISTRY = {}
-_KEY_OF_FUNC_OR_CLS = "name"
+_registry = {}
+_key = "name"
 
 
 def load(f=None, obj=None) -> OmegaConf:
@@ -50,8 +50,8 @@ def register(func_or_cls=None, name: str = None):
         if name is None:
             name = func_or_cls.__name__
 
-        if name not in _REGISTRY:
-            _REGISTRY[name] = func_or_cls
+        if name not in _registry:
+            _registry[name] = func_or_cls
         else:
             raise ValueError("duplicate name {} found".format(name))
 
@@ -64,14 +64,14 @@ def register(func_or_cls=None, name: str = None):
 
 
 def getcls(conf):
-    return _REGISTRY[conf[_KEY_OF_FUNC_OR_CLS]]
+    return _registry[conf[_key]]
 
 
 def instantiate(conf, *args, **kwargs):
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in conf.items():
-        if k not in kwargs and k != _KEY_OF_FUNC_OR_CLS:
+        if k not in kwargs and k != _key:
             kwargs[k] = v
 
     func_or_cls = getcls(conf)
