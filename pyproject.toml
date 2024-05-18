@@ -31,9 +31,9 @@ select = [
     "E", # pycodestyle errors
     "F", # pyflakes
     "I", # isort
+    "SIM", # flake8-simplify
     # "UP", # pyupgrade
     "W", # pycodestyle warnings
-
 ]
 
 [tool.ruff.lint.per-file-ignores]

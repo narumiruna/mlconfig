@@ -19,14 +19,12 @@ def _register_classes(module, superclass, prefix=None, sep="."):
             if prefix is not None:
                 name = prefix + sep + name
 
-            mlconfig.conf(attr, name=name)
+            mlconfig.register(attr, name=name)
 
 
 def get_lr_scheduler_class():
     # PyTorch 2.0 renamed LRScheduler to _LRScheduler
-    name = (
-        "LRScheduler" if hasattr(optim.lr_scheduler, "LRScheduler") else "_LRScheduler"
-    )
+    name = "LRScheduler" if hasattr(optim.lr_scheduler, "LRScheduler") else "_LRScheduler"
     return getattr(optim.lr_scheduler, name)
 
 
