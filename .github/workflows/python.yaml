@@ -30,7 +30,7 @@ jobs:
         run: poetry run ruff check .
       - 
         name: Test
-        run: poetry run pytest -v -s --cov=sharepay --cov-report=xml tests
+        run: poetry run pytest -v -s --cov=. --cov-report=xml tests
       - 
         name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
