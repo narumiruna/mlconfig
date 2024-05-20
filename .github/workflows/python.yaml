@@ -12,19 +12,27 @@ jobs:
         python-version: ["3.9", "3.10", "3.11"]
         poetry-version: ["1.8.3"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - 
+        uses: actions/checkout@v4
+      -
+        name: Install Poetry
+        run: pipx install poetry==${{ matrix.poetry-version }}
+      - 
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
-      - uses: chartboost/ruff-action@v1
-      - name: Install dependencies
-        run: pip install .
-      - name: Test
-        run: |
-          pip install pytest pytest-cov
-          pytest -v -s --cov=sharepay --cov-report=xml tests
-      - name: Upload coverage reports to Codecov
+          cache: poetry
+      -
+        name: Install dependencies
+        run: poetry install
+      - 
+        name: Lint
+        run: poetry run ruff check .
+      - 
+        name: Test
+        run: poetry run pytest -v -s --cov=sharepay --cov-report=xml tests
+      - 
+        name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
