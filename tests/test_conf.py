@@ -1,5 +1,6 @@
 import pytest
 
+from mlconfig import flatten
 from mlconfig import getcls
 from mlconfig import instantiate
 from mlconfig import load
@@ -55,3 +56,16 @@ def test_instantiate(conf, obj):
 
 def test_getcls(conf):
     assert getcls(conf["a"]) == Point
+
+
+@pytest.mark.parametrize(
+    "test_input,expected",
+    [
+        ({}, {}),
+        ({"a": "b"}, {"a": "b"}),
+        ({"a": {"b": {"c": "d"}}}, {"a.b.c": "d"}),
+        ({"a": {"b": "c"}, "d": {"e": "f"}}, {"a.b": "c", "d.e": "f"}),
+    ],
+)
+def test_flatten(test_input: dict, expected: dict) -> None:
+    assert flatten(test_input) == expected
