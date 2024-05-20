@@ -1,5 +1,6 @@
 import copy
 import functools
+from typing import Optional
 
 from omegaconf import OmegaConf
 
@@ -77,3 +78,19 @@ def instantiate(conf, *args, **kwargs):
     func_or_cls = getcls(conf)
 
     return func_or_cls(*args, **kwargs)
+
+
+def flatten(data: dict, prefix: Optional[str] = None, sep: str = ".") -> dict:
+    d = {}
+
+    for key, value in data.items():
+        if prefix is not None:
+            key = prefix + sep + key
+
+        if isinstance(value, dict):
+            d.update(flatten(value, prefix=key))
+            continue
+
+        d[key] = value
+
+    return d
