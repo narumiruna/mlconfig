@@ -1,14 +1,18 @@
 import copy
 import functools
+from typing import Any
 from typing import Optional
+from typing import Union
 
+from omegaconf import DictConfig
+from omegaconf import ListConfig
 from omegaconf import OmegaConf
 
 _registry = {}
 _key = "name"
 
 
-def load(f=None, obj=None) -> OmegaConf:
+def load(f: Optional[str] = None, obj: Optional[Any] = None) -> Union[ListConfig, DictConfig]:
     """Load configuration file or structured object.
     If both are provided, then the configuration from file
     will override the configuration from structured object.
@@ -37,7 +41,7 @@ def load(f=None, obj=None) -> OmegaConf:
     return OmegaConf.merge(*configs)
 
 
-def register(func_or_cls=None, name: str = None):
+def register(func_or_cls=None, name: Optional[str] = None):
     r"""Register function or class
 
     Args:
