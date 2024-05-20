@@ -28,6 +28,9 @@ jobs:
       - 
         name: Lint
         run: poetry run ruff check .
+      -
+        name: Type check
+        run: poetry run mypy --install-types --non-interactive mlconfig
       - 
         name: Test
         run: poetry run pytest -v -s --cov=mlconfig --cov-report=xml tests

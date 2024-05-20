@@ -3,7 +3,7 @@ import functools
 import mlconfig
 
 try:
-    from torch import optim
+    from torch import optim  # type: ignore
 except ImportError:
     print("Failed to import torch.")
 
