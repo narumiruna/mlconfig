@@ -11,7 +11,7 @@ register(optim.Adam)
 @register
 class LeNet(nn.Module):
     def __init__(self, num_classes):
-        super(LeNet, self).__init__()
+        super().__init__()
         self.num_classes = num_classes
 
         self.features = nn.Sequential(

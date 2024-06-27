@@ -4,38 +4,29 @@ on:
   push:
 
 jobs:
-  build:
+  python:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
         poetry-version: ["1.8.3"]
     steps:
-      - 
-        uses: actions/checkout@v4
-      -
-        name: Install Poetry
-        run: pipx install poetry==${{ matrix.poetry-version }}
-      - 
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
-      -
-        name: Install dependencies
+      - uses: narumiruna/setup-poetry@v1
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Install dependencies
         run: poetry install
-      - 
-        name: Lint
+      - name: Lint
         run: poetry run ruff check .
-      -
-        name: Type check
-        run: poetry run mypy --install-types --non-interactive mlconfig
-      - 
-        name: Test
+      - name: Type check
+        run: poetry run mypy --install-types --non-interactive .
+      - name: Test
         run: poetry run pytest -v -s --cov=mlconfig --cov-report=xml tests
-      - 
-        name: Upload coverage reports to Codecov
+      - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

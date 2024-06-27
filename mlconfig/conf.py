@@ -58,7 +58,7 @@ def register(func_or_cls=None, name: Optional[str] = None):
         if name not in _registry:
             _registry[name] = func_or_cls
         else:
-            raise ValueError("duplicate name {} found".format(name))
+            raise ValueError(f"duplicate name {name} found")
 
         return func_or_cls
 
