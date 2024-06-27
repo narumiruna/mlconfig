@@ -9,23 +9,18 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 1
       matrix:
         python-version: ["3.11"]
         poetry-version: ["1.8.3"]
     steps:
-      - 
-        uses: actions/checkout@v4
-      - 
-        name: Install Poetry
-        run: pipx install poetry==${{ matrix.poetry-version }}
-      - 
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
-      - 
-        name: Publish
+      - uses: narumiruna/setup-poetry@v1
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Publish
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
