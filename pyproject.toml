@@ -10,7 +10,7 @@ python = "^3.9"
 omegaconf = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.2.2"
+pytest = "^8.3.1"
 pytest-cov = "^5.0.0"
 ruff = "^0.5.4"
 toml = "^0.10.2"
