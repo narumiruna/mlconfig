@@ -12,7 +12,7 @@ omegaconf = "^2.3.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 pytest-cov = "^5.0.0"
-ruff = "^0.6.5"
+ruff = "^0.6.6"
 toml = "^0.10.2"
 mypy = "^1.11.2"
 
