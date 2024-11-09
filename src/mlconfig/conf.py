@@ -1,8 +1,8 @@
+from __future__ import annotations
+
 import copy
 import functools
 from typing import Any
-from typing import Optional
-from typing import Union
 
 from omegaconf import DictConfig
 from omegaconf import ListConfig
@@ -12,7 +12,7 @@ _registry = {}
 _key = "name"
 
 
-def load(f: Optional[str] = None, obj: Optional[Any] = None) -> Union[ListConfig, DictConfig]:
+def load(f: str | None = None, obj: Any | None = None) -> ListConfig | DictConfig:
     """Load configuration file or structured object.
     If both are provided, then the configuration from file
     will override the configuration from structured object.
@@ -41,7 +41,7 @@ def load(f: Optional[str] = None, obj: Optional[Any] = None) -> Union[ListConfig
     return OmegaConf.merge(*configs)
 
 
-def register(func_or_cls=None, name: Optional[str] = None):
+def register(func_or_cls=None, name: str | None = None):
     r"""Register function or class
 
     Args:
@@ -84,7 +84,7 @@ def instantiate(conf, *args, **kwargs):
     return func_or_cls(*args, **kwargs)
 
 
-def flatten(data: dict, prefix: Optional[str] = None, sep: str = ".") -> dict:
+def flatten(data: dict, prefix: str | None = None, sep: str = ".") -> dict:
     d = {}
 
     for key, value in data.items():
