@@ -1,6 +1,6 @@
 [project]
 name = "mlconfig"
-version = "0.2.2"
+version = "0.2.3"
 description = ""
 readme = "README.md"
 authors = [{ name = "narumi", email = "toucans-cutouts0f@icloud.com" }]
