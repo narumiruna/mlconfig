@@ -20,7 +20,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
       - name: Publish
         env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
           uv build --wheel
-          uv publish --token $PYPI_TOKEN
+          uv publish
