@@ -100,7 +100,7 @@ def flatten(data: dict[str, Any], prefix: str | None = None, sep: str = ".") -> 
             key = prefix + sep + key
 
         if isinstance(value, dict):
-            d.update(flatten(value, prefix=key))
+            d.update(flatten(value, prefix=key, sep=sep))
             continue
 
         d[key] = value
