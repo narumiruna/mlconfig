@@ -41,7 +41,7 @@ def load(f: str | None = None, obj: Any | None = None) -> ListConfig | DictConfi
     return OmegaConf.merge(*configs)
 
 
-def register(func_or_cls=None, name: str | None = None):
+def register(func_or_cls: Any = None, name: str | None = None) -> Any:
     r"""Register function or class
 
     Args:
@@ -68,15 +68,23 @@ def register(func_or_cls=None, name: str | None = None):
     return _register(func_or_cls, name=name)
 
 
-def getcls(conf):
+def getcls(conf: DictConfig) -> Any:
+    key = conf[_key]
+
+    if not isinstance(key, str):
+        raise ValueError(f"key {key} must be a string")
+
+    if key not in _registry:
+        raise ValueError(f"key {key} not found in registry")
+
     return _registry[conf[_key]]
 
 
-def instantiate(conf, *args, **kwargs):
+def instantiate(conf: DictConfig, *args: Any, **kwargs: Any) -> Any:
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in conf.items():
-        if k not in kwargs and k != _key:
+        if isinstance(k, str) and k not in kwargs and k != _key:
             kwargs[k] = v
 
     func_or_cls = getcls(conf)
@@ -84,7 +92,7 @@ def instantiate(conf, *args, **kwargs):
     return func_or_cls(*args, **kwargs)
 
 
-def flatten(data: dict, prefix: str | None = None, sep: str = ".") -> dict:
+def flatten(data: dict[str, Any], prefix: str | None = None, sep: str = ".") -> dict[str, Any]:
     d = {}
 
     for key, value in data.items():
