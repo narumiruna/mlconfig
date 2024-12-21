@@ -19,9 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
         with:
-          enable-cache: true
-      - name: Install Python
-        run: uv python install ${{ matrix.python-version }}
+          python-version:  ${{ matrix.python-version }}
       - name: Install dependencies
         run: uv sync
       - name: Lint
