@@ -49,3 +49,9 @@ filterwarnings = ["ignore::DeprecationWarning"]
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.bumpversion]
+current_version = "0.2.3"
+tag = true
+commit = true
+pre_commit_hooks = ["uv lock", "git add uv.lock"]
