@@ -11,8 +11,8 @@ dependencies = ["omegaconf>=2.3.0"]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "mypy>=1.13.0",
     "pytest>=8.3.3",
     "pytest-cov>=5.0.0",
