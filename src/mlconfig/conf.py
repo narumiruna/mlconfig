@@ -68,7 +68,7 @@ def register(func_or_cls: Any = None, name: str | None = None) -> Any:
     return _register(func_or_cls, name=name)
 
 
-def getcls(conf: DictConfig) -> Any:
+def getcls(conf: DictConfig | dict) -> Any:
     key = conf[_key]
 
     if not isinstance(key, str):
@@ -80,7 +80,7 @@ def getcls(conf: DictConfig) -> Any:
     return _registry[conf[_key]]
 
 
-def instantiate(conf: DictConfig, *args: Any, **kwargs: Any) -> Any:
+def instantiate(conf: DictConfig | dict, *args: Any, **kwargs: Any) -> Any:
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in conf.items():

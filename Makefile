@@ -2,7 +2,7 @@ lint:
 	uv run ruff check .
 
 type:
-	uv run mypy --install-types --non-interactive .
+	uv run ty check .
 
 test:
 	uv run pytest -v -s --cov=src tests

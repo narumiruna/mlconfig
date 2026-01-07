@@ -1,5 +1,5 @@
-from torch import nn
-from torch import optim
+from torch import nn  # ty:ignore[unresolved-import]
+from torch import optim  # ty:ignore[unresolved-import]
 
 from mlconfig import instantiate
 from mlconfig import load
