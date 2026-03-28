@@ -1,28 +1,29 @@
 [project]
-name = "mlconfig"
-version = "0.3.2"
-description = ""
-readme = "README.md"
+name            = "mlconfig"
+version         = "0.3.2"
+description     = ""
+readme          = "README.md"
 requires-python = ">=3.10"
-authors = [{ name = "narumi", email = "toucans-cutouts0f@icloud.com" }]
-dependencies = ["omegaconf>=2.3.0"]
+authors         = [{ name = "narumi", email = "toucans-cutouts0f@icloud.com" }]
+dependencies    = ["omegaconf>=2.3.0"]
 
 [dependency-groups]
 dev = [
   "pytest>=8.3.3",
   "pytest-cov>=5.0.0",
   "ruff>=0.7.1",
+  "tombi>=0.9.9",
   "ty>=0.0.9",
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires      = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.bumpversion]
-current_version = "0.3.2"
-tag = true
-commit = true
+current_version  = "0.3.2"
+tag              = true
+commit           = true
 pre_commit_hooks = ["uv lock", "git add uv.lock"]
 
 [tool.pytest]
@@ -33,14 +34,14 @@ line-length = 120
 
 [tool.ruff.lint]
 select = [
-  "B",  # flake8-bugbear
-  "C",  # flake8-comprehensions
-  "E",  # pycodestyle errors
-  "F",  # pyflakes
-  "I",  # isort
-  "SIM",  # flake8-simplify
-  "UP",  # pyupgrade
-  "W",  # pycodestyle warnings
+  "B",      # flake8-bugbear
+  "C",      # flake8-comprehensions
+  "E",      # pycodestyle errors
+  "F",      # pyflakes
+  "I",      # isort
+  "SIM",    # flake8-simplify
+  "UP",     # pyupgrade
+  "W",      # pycodestyle warnings
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -48,3 +49,7 @@ select = [
 
 [tool.ruff.lint.isort]
 force-single-line = true
+
+[tool.tombi.format.rules]
+key-value-equals-sign-alignment = true
+trailing-comment-alignment      = true
