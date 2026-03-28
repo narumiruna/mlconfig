@@ -7,18 +7,26 @@ requires-python = ">=3.10"
 authors = [{ name = "narumi", email = "toucans-cutouts0f@icloud.com" }]
 dependencies = ["omegaconf>=2.3.0"]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [dependency-groups]
 dev = [
   "pytest>=8.3.3",
   "pytest-cov>=5.0.0",
   "ruff>=0.7.1",
-  "toml>=0.10.2",
   "ty>=0.0.9",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.bumpversion]
+current_version = "0.3.2"
+tag = true
+commit = true
+pre_commit_hooks = ["uv lock", "git add uv.lock"]
+
+[tool.pytest]
+filterwarnings = ["ignore::DeprecationWarning"]
 
 [tool.ruff]
 line-length = 120
@@ -40,12 +48,3 @@ select = [
 
 [tool.ruff.lint.isort]
 force-single-line = true
-
-[tool.pytest.ini_options]
-filterwarnings = ["ignore::DeprecationWarning"]
-
-[tool.bumpversion]
-current_version = "0.3.2"
-tag = true
-commit = true
-pre_commit_hooks = ["uv lock", "git add uv.lock"]
