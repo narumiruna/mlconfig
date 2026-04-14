@@ -9,7 +9,7 @@ dependencies    = ["omegaconf>=2.3.0"]
 
 [dependency-groups]
 dev = [
-  "pytest>=8.3.3",
+  "pytest>=9.0.3",
   "pytest-cov>=5.0.0",
   "ruff>=0.7.1",
   "tombi>=0.9.9",
