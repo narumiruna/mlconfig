@@ -50,6 +50,9 @@ select = [
 [tool.ruff.lint.isort]
 force-single-line = true
 
+[tool.tombi.files]
+exclude = ["uv.lock"]
+
 [tool.tombi.format.rules]
 key-value-equals-sign-alignment = true
 trailing-comment-alignment      = true
