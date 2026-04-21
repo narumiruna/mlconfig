@@ -5,7 +5,6 @@ import functools
 from collections.abc import Callable
 from collections.abc import Mapping
 from typing import Protocol
-from typing import TypeVar
 from typing import cast
 
 from omegaconf import DictConfig
@@ -16,9 +15,6 @@ from omegaconf import OmegaConf
 class _NamedObject(Protocol):
     __name__: str
 
-
-_T = TypeVar("_T", bound=_NamedObject)
-_InstantiatedT = TypeVar("_InstantiatedT")
 
 _registry: dict[str, object] = {}
 _key = "name"
@@ -53,7 +49,7 @@ def load(f: str | None = None, obj: object | None = None) -> ListConfig | DictCo
     return OmegaConf.merge(*configs)
 
 
-def register(func_or_cls: _T | str | None = None, name: str | None = None) -> Callable[[_T], _T] | _T:
+def register[T: _NamedObject](func_or_cls: T | str | None = None, name: str | None = None) -> Callable[[T], T] | T:
     r"""Register function or class
 
     Args:
@@ -63,7 +59,7 @@ def register(func_or_cls: _T | str | None = None, name: str | None = None) -> Ca
     if isinstance(func_or_cls, str) and name is None:
         func_or_cls, name = None, func_or_cls
 
-    def _register(func_or_cls: _T, name: str | None = None) -> _T:
+    def _register(func_or_cls: T, name: str | None = None) -> T:
         if name is None:
             name = func_or_cls.__name__
 
@@ -77,7 +73,7 @@ def register(func_or_cls: _T | str | None = None, name: str | None = None) -> Ca
     if func_or_cls is None:
         return functools.partial(_register, name=name)
 
-    return _register(cast("_T", func_or_cls), name=name)
+    return _register(cast("T", func_or_cls), name=name)
 
 
 def getcls(conf: DictConfig | Mapping[str, object]) -> object:
@@ -108,12 +104,12 @@ def instantiate(conf: DictConfig | Mapping[str, object], *args: object, **kwargs
     return callable_obj(*args, **kwargs)
 
 
-def instantiate_as(
+def instantiate_as[InstantiatedT](
     conf: DictConfig | Mapping[str, object],
-    expected_type: type[_InstantiatedT],
+    expected_type: type[InstantiatedT],
     *args: object,
     **kwargs: object,
-) -> _InstantiatedT:
+) -> InstantiatedT:
     result = instantiate(conf, *args, **kwargs)
     if not isinstance(result, expected_type):
         actual_name = type(result).__qualname__
