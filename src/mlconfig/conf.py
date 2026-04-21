@@ -2,17 +2,28 @@ from __future__ import annotations
 
 import copy
 import functools
-from typing import Any
+from collections.abc import Callable
+from collections.abc import Mapping
+from typing import Protocol
+from typing import TypeVar
+from typing import cast
 
 from omegaconf import DictConfig
 from omegaconf import ListConfig
 from omegaconf import OmegaConf
 
-_registry = {}
+
+class _NamedObject(Protocol):
+    __name__: str
+
+
+_T = TypeVar("_T", bound=_NamedObject)
+
+_registry: dict[str, object] = {}
 _key = "name"
 
 
-def load(f: str | None = None, obj: Any | None = None) -> ListConfig | DictConfig:
+def load(f: str | None = None, obj: object | None = None) -> ListConfig | DictConfig:
     """Load configuration file or structured object.
     If both are provided, then the configuration from file
     will override the configuration from structured object.
@@ -41,7 +52,7 @@ def load(f: str | None = None, obj: Any | None = None) -> ListConfig | DictConfi
     return OmegaConf.merge(*configs)
 
 
-def register(func_or_cls: Any = None, name: str | None = None) -> Any:
+def register(func_or_cls: _T | str | None = None, name: str | None = None) -> Callable[[_T], _T] | _T:
     r"""Register function or class
 
     Args:
@@ -51,7 +62,7 @@ def register(func_or_cls: Any = None, name: str | None = None) -> Any:
     if isinstance(func_or_cls, str) and name is None:
         func_or_cls, name = None, func_or_cls
 
-    def _register(func_or_cls, name=None):
+    def _register(func_or_cls: _T, name: str | None = None) -> _T:
         if name is None:
             name = func_or_cls.__name__
 
@@ -65,10 +76,10 @@ def register(func_or_cls: Any = None, name: str | None = None) -> Any:
     if func_or_cls is None:
         return functools.partial(_register, name=name)
 
-    return _register(func_or_cls, name=name)
+    return _register(cast("_T", func_or_cls), name=name)
 
 
-def getcls(conf: DictConfig | dict) -> Any:
+def getcls(conf: DictConfig | dict[str, object]) -> object:
     key = conf[_key]
 
     if not isinstance(key, str):
@@ -77,10 +88,10 @@ def getcls(conf: DictConfig | dict) -> Any:
     if key not in _registry:
         raise ValueError(f"key {key} not found in registry")
 
-    return _registry[conf[_key]]
+    return _registry[key]
 
 
-def instantiate(conf: DictConfig | dict, *args: Any, **kwargs: Any) -> Any:
+def instantiate(conf: DictConfig | dict[str, object], *args: object, **kwargs: object) -> object:
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in conf.items():
@@ -88,19 +99,23 @@ def instantiate(conf: DictConfig | dict, *args: Any, **kwargs: Any) -> Any:
             kwargs[k] = v
 
     func_or_cls = getcls(conf)
+    if not callable(func_or_cls):
+        raise TypeError(f"registered object {func_or_cls} is not callable")
 
-    return func_or_cls(*args, **kwargs)
+    callable_obj = cast("Callable[..., object]", func_or_cls)
+    return callable_obj(*args, **kwargs)
 
 
-def flatten(data: dict[str, Any], prefix: str | None = None, sep: str = ".") -> dict[str, Any]:
-    d = {}
+def flatten(data: Mapping[str, object], prefix: str | None = None, sep: str = ".") -> dict[str, object]:
+    d: dict[str, object] = {}
 
     for key, value in data.items():
         if prefix is not None:
             key = prefix + sep + key
 
-        if isinstance(value, dict):
-            d.update(flatten(value, prefix=key, sep=sep))
+        if isinstance(value, Mapping):
+            nested = cast("Mapping[str, object]", value)
+            d.update(flatten(nested, prefix=key, sep=sep))
             continue
 
         d[key] = value
