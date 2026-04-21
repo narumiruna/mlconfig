@@ -3,7 +3,6 @@ from __future__ import annotations
 import copy
 import functools
 from collections.abc import Callable
-from collections.abc import Mapping
 from typing import Protocol
 from typing import TypeVar
 from typing import cast
@@ -122,15 +121,15 @@ def instantiate_as(
     return result
 
 
-def flatten(data: Mapping[str, object], prefix: str | None = None, sep: str = ".") -> dict[str, object]:
+def flatten(data: dict[str, object], prefix: str | None = None, sep: str = ".") -> dict[str, object]:
     d: dict[str, object] = {}
 
     for key, value in data.items():
         if prefix is not None:
             key = prefix + sep + key
 
-        if isinstance(value, Mapping):
-            nested = cast("Mapping[str, object]", value)
+        if isinstance(value, dict):
+            nested = cast("dict[str, object]", value)
             d.update(flatten(nested, prefix=key, sep=sep))
             continue
 
