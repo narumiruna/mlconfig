@@ -35,7 +35,7 @@ def load(f: str | None = None, obj: Any | None = None) -> ListConfig | DictConfi
     length = len(configs)
     if length == 0:
         raise ValueError("No configuration file or structured object provided.")
-    elif length == 1:
+    if length == 1:
         return configs[0]
 
     return OmegaConf.merge(*configs)
@@ -72,7 +72,7 @@ def getcls(conf: DictConfig | dict) -> Any:
     key = conf[_key]
 
     if not isinstance(key, str):
-        raise ValueError(f"key {key} must be a string")
+        raise TypeError(f"key {key} must be a string")
 
     if key not in _registry:
         raise ValueError(f"key {key} not found in registry")
