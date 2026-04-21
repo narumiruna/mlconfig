@@ -1,5 +1,6 @@
-from torch import nn  # ty:ignore[unresolved-import]
-from torch import optim  # ty:ignore[unresolved-import]
+from torch import Tensor
+from torch import nn
+from torch import optim
 
 from mlconfig import instantiate
 from mlconfig import load
@@ -10,7 +11,7 @@ register(optim.Adam)
 
 @register
 class LeNet(nn.Module):
-    def __init__(self, num_classes):
+    def __init__(self, num_classes: int) -> None:
         super().__init__()
         self.num_classes = num_classes
 
@@ -31,14 +32,13 @@ class LeNet(nn.Module):
             nn.Linear(84, self.num_classes),
         )
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
         x = self.features(x)
         x = x.view(x.size(0), -1)
-        x = self.classifier(x)
-        return x
+        return self.classifier(x)
 
 
-def main():
+def main() -> None:
     config = load("conf.yaml")
 
     model = instantiate(config.model)

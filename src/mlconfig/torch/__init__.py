@@ -3,12 +3,12 @@ import functools
 import mlconfig
 
 try:
-    from torch import optim  # type: ignore
+    from torch import optim
 except ImportError:
     print("Failed to import torch.")
 
 
-def _register_classes(module, superclass, prefix=None, sep="."):
+def _register_classes(module, superclass, prefix=None, sep=".") -> None:
     for name in dir(module):
         attr = getattr(module, name)
 
