@@ -1,11 +1,8 @@
 import functools
 
-import mlconfig
+from torch import optim
 
-try:
-    from torch import optim
-except ImportError:
-    print("Failed to import torch.")
+import mlconfig
 
 
 def _register_classes(module, superclass, prefix=None, sep=".") -> None:
