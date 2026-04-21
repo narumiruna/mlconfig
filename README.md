@@ -195,9 +195,10 @@ provided prefix when one is passed, such as `scheduler.StepLR`.
 ## Development
 
 ```shell
-uv run pytest -v -s --cov=src tests
-uv run ruff check .
-uv run ty check .
+just format
+just lint
+just type
+just test
 ```
 
 ## License
