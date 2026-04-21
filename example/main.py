@@ -1,3 +1,5 @@
+from typing import cast
+
 from torch import Tensor
 from torch import nn
 from torch import optim
@@ -41,7 +43,7 @@ class LeNet(nn.Module):
 def main() -> None:
     config = load("conf.yaml")
 
-    model = instantiate(config.model)
+    model = cast(nn.Module, instantiate(config.model))
     optimizer = instantiate(config.optimizer, model.parameters())
     print(optimizer)
 
