@@ -3,7 +3,7 @@ name            = "mlconfig"
 version         = "0.3.2"
 description     = ""
 readme          = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 authors         = [{ name = "narumi", email = "toucans-cutouts0f@icloud.com" }]
 dependencies    = ["omegaconf>=2.3.0"]
 
@@ -12,7 +12,6 @@ dev = [
   "pytest>=9.0.3",
   "pytest-cov>=7.1.0",
   "ruff>=0.15.11",
-  "tombi>=0.9.20",
   "torch>=2.11.0",
   "ty>=0.0.32",
 ]
