@@ -177,15 +177,12 @@ def test_flatten_with_prefix() -> None:
     assert flatten(nested_dict, prefix="prefix") == expected
 
 
-def test_instantiate_non_callable() -> None:
-    from mlconfig.conf import _registry
+def test_instantiate_non_callable(monkeypatch: pytest.MonkeyPatch) -> None:
+    from mlconfig import conf as conf_module
 
-    _registry["_non_callable_test"] = 42  # type: ignore[assignment]
-    try:
-        with pytest.raises(TypeError, match="is not callable"):
-            instantiate({"name": "_non_callable_test"})
-    finally:
-        del _registry["_non_callable_test"]
+    monkeypatch.setitem(conf_module._registry, "_non_callable_test", 42)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="is not callable"):
+        instantiate({"name": "_non_callable_test"})
 
 
 def test_flatten_with_custom_separator() -> None:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import functools
 from collections.abc import Callable
+from collections.abc import Mapping
 from typing import Protocol
 from typing import TypeVar
 from typing import cast
@@ -79,7 +80,7 @@ def register(func_or_cls: _T | str | None = None, name: str | None = None) -> Ca
     return _register(cast("_T", func_or_cls), name=name)
 
 
-def getcls(conf: DictConfig | dict[str, object]) -> object:
+def getcls(conf: DictConfig | Mapping[str, object]) -> object:
     key = conf[_key]
 
     if not isinstance(key, str):
@@ -91,7 +92,7 @@ def getcls(conf: DictConfig | dict[str, object]) -> object:
     return _registry[key]
 
 
-def instantiate(conf: DictConfig | dict[str, object], *args: object, **kwargs: object) -> object:
+def instantiate(conf: DictConfig | Mapping[str, object], *args: object, **kwargs: object) -> object:
     kwargs = copy.deepcopy(kwargs)
 
     for k, v in conf.items():
@@ -100,14 +101,15 @@ def instantiate(conf: DictConfig | dict[str, object], *args: object, **kwargs: o
 
     func_or_cls = getcls(conf)
     if not callable(func_or_cls):
-        raise TypeError(f"registered object {func_or_cls} is not callable")
+        key = conf[_key]
+        raise TypeError(f"registry entry '{key}' has type {type(func_or_cls).__name__}, which is not callable")
 
     callable_obj = cast("Callable[..., object]", func_or_cls)
     return callable_obj(*args, **kwargs)
 
 
 def instantiate_as(
-    conf: DictConfig | dict[str, object],
+    conf: DictConfig | Mapping[str, object],
     expected_type: type[_InstantiatedT],
     *args: object,
     **kwargs: object,
@@ -121,7 +123,7 @@ def instantiate_as(
     return result
 
 
-def flatten(data: dict[str, object], prefix: str | None = None, sep: str = ".") -> dict[str, object]:
+def flatten(data: Mapping[str, object], prefix: str | None = None, sep: str = ".") -> dict[str, object]:
     d: dict[str, object] = {}
 
     for key, value in data.items():
