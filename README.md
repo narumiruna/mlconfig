@@ -28,6 +28,7 @@ from torch import nn
 from torch import optim
 
 from mlconfig import instantiate
+from mlconfig import instantiate_as
 from mlconfig import load
 from mlconfig import register
 
@@ -68,7 +69,7 @@ class LeNet(nn.Module):
 def main():
     config = load('conf.yaml')
 
-    model = instantiate(config.model)
+    model = instantiate_as(config.model, nn.Module)
     optimizer = instantiate(config.optimizer, model.parameters())
 
 

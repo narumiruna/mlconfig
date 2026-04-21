@@ -6,6 +6,7 @@ from omegaconf import DictConfig
 from mlconfig import flatten
 from mlconfig import getcls
 from mlconfig import instantiate
+from mlconfig import instantiate_as
 from mlconfig import load
 from mlconfig import register
 
@@ -71,6 +72,30 @@ def test_instantiate(conf: DictConfig, obj: ConfigData) -> None:
     assert isinstance(y_b, int)
     assert result.x == 2 * x1
     assert result.y == y_a + y_b
+
+
+def test_instantiate_as(conf: DictConfig, obj: ConfigData) -> None:
+    a = instantiate_as(conf.a, Point)
+    assert a.x == obj["x1"]
+    assert a.y == 3
+
+
+def test_instantiate_as_invalid_type(conf: DictConfig) -> None:
+    with pytest.raises(TypeError, match="instantiated object has type Point, expected str"):
+        instantiate_as(conf.a, str)
+
+
+def test_instantiate_as_with_kwargs(conf: DictConfig, obj: ConfigData) -> None:
+    a = instantiate_as(conf.a, Point, y=10)
+    assert a.x == obj["x1"]
+    assert a.y == 10
+
+
+def test_instantiate_as_with_args() -> None:
+    conf_with_args: ConfigData = {"name": "Point"}
+    a = instantiate_as(conf_with_args, Point, 5, 6)
+    assert a.x == 5
+    assert a.y == 6
 
 
 def test_getcls(conf: DictConfig) -> None:

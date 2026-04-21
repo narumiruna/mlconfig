@@ -18,6 +18,7 @@ class _NamedObject(Protocol):
 
 
 _T = TypeVar("_T", bound=_NamedObject)
+_InstantiatedT = TypeVar("_InstantiatedT")
 
 _registry: dict[str, object] = {}
 _key = "name"
@@ -104,6 +105,21 @@ def instantiate(conf: DictConfig | dict[str, object], *args: object, **kwargs: o
 
     callable_obj = cast("Callable[..., object]", func_or_cls)
     return callable_obj(*args, **kwargs)
+
+
+def instantiate_as(
+    conf: DictConfig | dict[str, object],
+    expected_type: type[_InstantiatedT],
+    *args: object,
+    **kwargs: object,
+) -> _InstantiatedT:
+    result = instantiate(conf, *args, **kwargs)
+    if not isinstance(result, expected_type):
+        actual_name = type(result).__qualname__
+        expected_name = expected_type.__qualname__
+        raise TypeError(f"instantiated object has type {actual_name}, expected {expected_name}")
+
+    return result
 
 
 def flatten(data: Mapping[str, object], prefix: str | None = None, sep: str = ".") -> dict[str, object]:
